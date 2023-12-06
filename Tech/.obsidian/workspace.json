@@ -1,0 +1,249 @@
+{
+  "main": {
+    "id": "ba4c7eed0e827985",
+    "type": "split",
+    "children": [
+      {
+        "id": "d6a05157ee2fd62c",
+        "type": "tabs",
+        "dimension": 46.448467966573816,
+        "children": [
+          {
+            "id": "4c8f0c0a917c35c9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/四、Spring 组件.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "5ab9bf97d0032052",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/一、Java 运行机制与JVM.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "92ad5ff674028f25",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/二、Java 基础.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "7f7bcd3703e6c2de",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/三、Spring 基础.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "a6cc7005559d000c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/四、Spring 组件.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "7c499c1a58dffae8",
+        "type": "tabs",
+        "dimension": 53.551532033426184,
+        "children": [
+          {
+            "id": "d7896a39d35c247d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "数据存储结构/一、数据结构与算法.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bfc50c294a78bcc0",
+    "type": "split",
+    "children": [
+      {
+        "id": "b69a248004984bce",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a70b4df194096c58",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byCreatedTimeReverse"
+              }
+            }
+          },
+          {
+            "id": "d6441d205d4b4d0f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "01e0be2e56aae9e3",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "44480578bb64fb30",
+    "type": "split",
+    "children": [
+      {
+        "id": "8dc3bbb1bd2fc69d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "405b6e1375ec8d21",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "数据存储结构/一、数据结构与算法.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "3389f22a90902fed",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "数据存储结构/一、数据结构与算法.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "549c513b83b8b66e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "f3801458c4fc613a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "数据存储结构/一、数据结构与算法.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "markdown-importer:打开 Markdown 格式转换器": false
+    }
+  },
+  "active": "d7896a39d35c247d",
+  "lastOpenFiles": [
+    "Java/一、Java 运行机制与JVM.md",
+    "Java/三、Spring 基础.md",
+    "Java/二、Java 基础.md",
+    "Java/四、Spring 组件.md",
+    "未命名.md",
+    "数据存储结构/一、数据结构与算法.md",
+    "数据存储结构/三、Redis.md",
+    "数据存储结构/二、MySQL.md",
+    "picture/Pasted image 20231125231834.png",
+    "picture/Pasted image 20231125224607.png",
+    "picture/Pasted image 20231125224133.png",
+    "picture/Pasted image 20231125222845.png",
+    "picture/Pasted image 20231125222416.png",
+    "picture/Pasted image 20231125221750.png",
+    "picture/Pasted image 20231125221604.png",
+    "picture/Pasted image 20231125221206.png",
+    "数据传输体系",
+    "分布式架构",
+    "picture/Pasted image 20231125165623.png",
+    "picture/Pasted image 20231125165326.png",
+    "picture",
+    "pic",
+    "未命名文件夹",
+    "image-20231008230652146.md",
+    "image-20231008230652146 2.png.md",
+    "Java",
+    "数据存储结构"
+  ]
+}

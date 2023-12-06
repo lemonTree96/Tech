@@ -1,0 +1,16 @@
+{
+  "accentColor": "",
+  "theme": "moonstone",
+  "interfaceFontFamily": "Inter",
+  "cssTheme": "obsidian",
+  "baseFontSize": 13,
+  "baseFontSizeAction": false,
+  "textFontFamily": "Inter",
+  "monospaceFontFamily": "",
+  "translucency": false,
+  "enabledCssSnippets": [
+    "pic",
+    "coffeebean-补充图片对齐语法",
+    "head-style"
+  ]
+}
