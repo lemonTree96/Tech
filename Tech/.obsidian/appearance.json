@@ -1,16 +1,20 @@
 {
-  "accentColor": "",
+  "accentColor": "#77b842",
   "theme": "moonstone",
-  "interfaceFontFamily": "Inter",
+  "interfaceFontFamily": "",
   "cssTheme": "obsidian",
-  "baseFontSize": 13,
+  "baseFontSize": 12,
   "baseFontSizeAction": false,
-  "textFontFamily": "Inter",
+  "textFontFamily": "Comic Sans MS",
   "monospaceFontFamily": "",
-  "translucency": false,
+  "translucency": true,
   "enabledCssSnippets": [
     "pic",
     "coffeebean-补充图片对齐语法",
-    "head-style"
-  ]
+    "test",
+    "test2",
+    "标题",
+    "代码块"
+  ],
+  "nativeMenus": false
 }

@@ -3,5 +3,9 @@
   "newLinkFormat": "relative",
   "showUnsupportedFiles": false,
   "attachmentFolderPath": "picture",
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "livePreview": false,
+  "readableLineLength": true,
+  "showLineNumber": true,
+  "useMarkdownLinks": false
 }

@@ -4,86 +4,38 @@
     "type": "split",
     "children": [
       {
-        "id": "d6a05157ee2fd62c",
+        "id": "aa89f68a232afbde",
         "type": "tabs",
-        "dimension": 46.448467966573816,
+        "dimension": 35.39823008849557,
         "children": [
           {
-            "id": "4c8f0c0a917c35c9",
+            "id": "8a96e7405cabe323",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java/四、Spring 组件.md",
+                "file": "Java/五、Java web.md",
                 "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "5ab9bf97d0032052",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/一、Java 运行机制与JVM.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "92ad5ff674028f25",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/二、Java 基础.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "7f7bcd3703e6c2de",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/三、Spring 基础.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "a6cc7005559d000c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/四、Spring 组件.md",
-                "mode": "source",
-                "source": false
+                "source": true
               }
             }
           }
         ]
       },
       {
-        "id": "7c499c1a58dffae8",
+        "id": "41d4fcb1f6328d3b",
         "type": "tabs",
-        "dimension": 53.551532033426184,
+        "dimension": 64.60176991150442,
         "children": [
           {
-            "id": "d7896a39d35c247d",
+            "id": "e901000b0f833745",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "数据存储结构/一、数据结构与算法.md",
+                "file": "Java/五、Java web.md",
                 "mode": "preview",
-                "source": false
+                "source": true
               }
             }
           }
@@ -137,7 +89,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "44480578bb64fb30",
@@ -153,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "数据存储结构/一、数据结构与算法.md",
+                "file": "Java/五、Java web.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -170,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "数据存储结构/一、数据结构与算法.md",
+                "file": "Java/五、Java web.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -193,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "数据存储结构/一、数据结构与算法.md"
+                "file": "Java/五、Java web.md"
               }
             }
           }
@@ -216,28 +169,31 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "d7896a39d35c247d",
+  "active": "8a96e7405cabe323",
   "lastOpenFiles": [
-    "Java/一、Java 运行机制与JVM.md",
+    "picture/Pasted image 20240317090439.png",
     "Java/三、Spring 基础.md",
-    "Java/二、Java 基础.md",
     "Java/四、Spring 组件.md",
-    "未命名.md",
+    "Java/五、Java web.md",
+    "picture/Pasted image 20240316000828.png",
+    "picture/Pasted image 20240316000329.png",
+    "picture/Pasted image 20240315232433.png",
+    "picture/Pasted image 20240314231725.png",
+    "picture/Pasted image 20240314230801.png",
+    "picture/Pasted image 20240313225128.png",
+    "picture/Pasted image 20240310175037.png",
+    "picture/Pasted image 20240309225941.png",
+    "picture/Pasted image 20240309224606.png",
+    "picture/Pasted image 20240309224241.png",
+    "11.md",
+    "Java/一、Java 运行机制与JVM.md",
+    "Java/二、Java 语法基础.md",
+    "数据存储结构/二、MySQL.md",
+    "a.md",
     "数据存储结构/一、数据结构与算法.md",
     "数据存储结构/三、Redis.md",
-    "数据存储结构/二、MySQL.md",
-    "picture/Pasted image 20231125231834.png",
-    "picture/Pasted image 20231125224607.png",
-    "picture/Pasted image 20231125224133.png",
-    "picture/Pasted image 20231125222845.png",
-    "picture/Pasted image 20231125222416.png",
-    "picture/Pasted image 20231125221750.png",
-    "picture/Pasted image 20231125221604.png",
-    "picture/Pasted image 20231125221206.png",
     "数据传输体系",
     "分布式架构",
-    "picture/Pasted image 20231125165623.png",
-    "picture/Pasted image 20231125165326.png",
     "picture",
     "pic",
     "未命名文件夹",

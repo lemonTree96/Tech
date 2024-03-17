@@ -7,6 +7,7 @@ body{
 	--accent-h: 153;
     --accent-s: 47%;
     --accent-l: 49%;
+    --file-line-width:50rem;  //栏宽调整
 	--icon-color-hover: hsl(var(--interactive-accent-hsl));	
 	--background-modifier-message: hsl(var(--interactive-accent-hsl));
     --background-modifier-hover: hsla(var(--interactive-accent-hsl), 0.05);
@@ -186,7 +187,7 @@ thead {
     border: 1px solid;
     padding: 0px 2px;
     border-radius: 3px;
-    top: -11px;
+    top: -8px;
 }
 
 .markdown-preview-view h6:hover::before, .HyperMD-header .cm-header-6:hover::before{
@@ -201,7 +202,7 @@ thead {
     border: 1px solid;
     padding: 0px 2px;
     border-radius: 3px;
-    top: -11px;
+    top: -8px;
 }
 /*Header END*/
 

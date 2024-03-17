@@ -1,5 +1,6 @@
 &emsp;&emsp;大量的应用使用Java进行开发，其原因之一是Java拥有非常丰富和框架与基础组件，这些框架与组件使得Java的开发十分高效和便捷。
 ![[../picture/Pasted image 20231125221604.png#pic_center|550]]
+
 ---
 ### 4.1 Maven - 项目管理
 ---
@@ -25,16 +26,70 @@
 #### 4.3.2 Feign 底层原理
 ##### 1. *Feign* 的装载与调用
 &emsp;&emsp;在微服务启动时，*Feign* 会进行包扫描，对加 *@FeignClient* 注解的接口，按照注解的规则，创建远程接口的本地 *JDK Proxy* 代理实例。然后，将这些本地Proxy代理实例，注入到 *Spring IOC* 容器中。当远程接口的方法被调用，由 *Proxy* 代理实例去完成真正的远程访问，并且返回结果。Fegin 的装载与调用过程主要分为三个步骤：**(1). *Fegin* 相关 *Bean* 的注册；(2). *Fegin* 相关 *Bean* 的依赖注入**；**(3).** 
-###### (1). _Feign_ 相关 _Bean_ 的注册
-&emsp;&emsp;◎ 在 Spring 项目启动阶段，Spring 会去扫描启动类是否存在 _@EnableFeignClients_ 注解，_@EnableFeignClients_ 注解是开启 _Fegin_ 功能的关键。在 _@EnableFeignClients_ 注解中，`@Import(FeignClientsRegistrar.class)` 会导入自动装载注册器 _FeignClientsRegistrar_ 类，对 _Feign_ 接口进行加载。    
-&emsp;&emsp;&emsp;◎  _FeignClientsRegistrar_ 类继承 Spring 中的 _ImportBeanDefinitionRegistrar_ 接口，并在 `registerBeanDefinitions(...)` 实现方法中向 *Spring* 容器注册 *Bean*，以达到自动注入第三方功能的目的。
+###### (1). _Feign_ 相关 *Bean* 的注册
+**▧  *Feign* 启动注解：*@EnableFeignClients* -> *@Import(FeignClientsRegistrar.class)***
+
+&emsp;&emsp; 在 Spring 项目启动阶段，Spring 会去扫描启动类是否存在 _@EnableFeignClients_ 注解，_@EnableFeignClients_ 注解是开启 _Fegin_ 功能的关键。在 _@EnableFeignClients_ 注解中，`@Import(FeignClientsRegistrar.class)` 会导入自动装载注册器 _FeignClientsRegistrar_ 类，对 _Feign_ 接口进行加载。 
+```java
+//1、Spring Application启动类
+@EnableFeignClients
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+//2、@EnableFeignClients 注解
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+@Import(FeignClientsRegistrar.class)
+public @interface EnableFeignClients {...}
+```
+
+**▧  *FeignClientsRegistrar* 注册到 IoC 容器**
+
+&emsp;&emsp;_FeignClientsRegistrar_ 类继承 Spring 中的 _ImportBeanDefinitionRegistrar_ 接口，并在 `registerBeanDefinitions(...)` 实现方法中向 *Spring* 容器注册 *Bean*，以达到自动注入第三方功能的目的。
 &emsp; &emsp;&emsp;&emsp;   ①  在 `registerBeanDefinitions(...)` 方法中首先调用 `registerDefaultConfiguration(...)`方法从 _@EnableFeignClients_ 注解中提取 _defaultConfiguration_ 属性对应的 _Value_，并封装为 _**FeignClientSpecification**_ 作为默认的 _Feign_ 配置注册到 Spring 容器中。    
 &emsp; &emsp;&emsp;&emsp; ② 然后调用 `registerFeignClients(...)` 查找指定路径 _basePackage_ 的所有带有 _@FeignClients_ 注解的类、接口，将带有 _@FeignClients_ 注解的类、接口包装成 <font color=red>_**FeignClientFactoryBean**_ </font>注册到 Spring 容器。_FeignClientFactoryBean_ 类实现了 _FactoryBean<T>_，可以通过 `getObject()` 方法来获取并注入实例化对象。
+![[../picture/Pasted image 20231209215925.png#pic_center|520]]
 ![[../picture/Pasted image 20231125224133.png#pic_center|570]]
+```java
+private ResourceLoader resourceLoader;  // 资源加载器，可以加载 classpath 下的所有文件
+private Environment environment;   // 上下文，可通过该环境获取当前应用配置属性等
+
+@Override
+public void setEnvironment(Environment environment) {
+    this.environment = environment;
+}
+
+@Override
+public void setResourceLoader(ResourceLoader resourceLoader) {
+    this.resourceLoader = resourceLoader;
+}
+
+@Override
+public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry){
+    //注册＠EnableFeignClients提供的自定义配置类相关Bean实例
+    registerDefaultConfiguration(metadata,registry);  
+    registerFeignClients(metadata, registry);  //扫描package，将@FeignClient修饰的接口类注册为Bean
+}
+```
 
 ###### (2). *Feign* 相关 *Bean* 的依赖注入
-&emsp;&emsp; 当代码中通过 _@Resource_ 或 _@Autowired_ 注解注入 _FeignClient_ 客户端时，会通过 _FeignClientFactoryBean_ 的 `getObject()` 方法来获取到动态代理对象。动态代理对象的生成是通过 _Feign.Builder_ 的 `target()` 方法中调用 `build()` 方法生成 _ReflectiveFeign_ 的实例，然后通过 `newInstance()` 方法创建最终的 RPC 动态代理的实例。
+&emsp;&emsp; 当代码中通过 _@Resource_ 或 _@Autowired_ 注解注入 _FeignClient_ 客户端时，会**通过 _FeignClientFactoryBean_ 的 `getObject()` 方法来获取到动态代理对象**。动态代理对象的生成是通过 _Feign.Builder_ 的 `target()` 方法中调用 `build()` 方法生成 _ReflectiveFeign_ 的实例，然后通过 `newInstance()` 方法创建最终的 RPC 动态代理的实例。
 ![[../picture/Pasted image 20231125224607.png#pic_center|580]]
+```java
+<T> T getTarget() {
+    // 从 IOC 容器获取 FeignContext
+    FeignContext context = applicationContext.getBean(FeignContext.class);
+    // 通过 context 创建 Feign 构造器
+    Feign.Builder builder = feign(context);
+  ...
+}
+```
 
 ---
-### 4.4 Mybatis - 数据持久层管理
+### 4.4 MyBatis - 数据持久层管理
+&emsp;&emsp;所谓持久化就是将程序数据在**持久状态**和**瞬时状态**间转换的机制。持久化的主要应用是将内存中的对象存储在数据库中，或者存储在磁盘文件中、XML数据文件中等等。JDBC 就是一种持久化机制，文件IO也是一种持久化机制。由**完成持久化工作所对应的代码块** Date Access Object( Dao ) 称之为持久层。
+&emsp;&emsp;&emsp;MyBatis 是一款优秀的持久层框架，它内部封装了 JDBC，支持自定义 SQL、存储过程以及高级映射。MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口为数据库中的记录，因此 MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集的过程，减少了代码的冗余，减少程序员的操作。
