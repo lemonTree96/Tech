@@ -6,7 +6,7 @@
       {
         "id": "aa89f68a232afbde",
         "type": "tabs",
-        "dimension": 35.39823008849557,
+        "dimension": 40.117994100294986,
         "children": [
           {
             "id": "8a96e7405cabe323",
@@ -19,13 +19,26 @@
                 "source": true
               }
             }
+          },
+          {
+            "id": "80a7a33d7444545a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "计算机网络/一、网络基础.md",
+                "mode": "source",
+                "source": true
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "41d4fcb1f6328d3b",
         "type": "tabs",
-        "dimension": 64.60176991150442,
+        "dimension": 59.882005899705014,
         "children": [
           {
             "id": "e901000b0f833745",
@@ -38,8 +51,21 @@
                 "source": true
               }
             }
+          },
+          {
+            "id": "1a1203a54b27f041",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "计算机网络/一、网络基础.md",
+                "mode": "preview",
+                "source": true
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -106,7 +132,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Java/五、Java web.md",
+                "file": "计算机网络/一、网络基础.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +149,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Java/五、Java web.md",
+                "file": "计算机网络/一、网络基础.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -146,12 +172,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Java/五、Java web.md"
+                "file": "计算机网络/一、网络基础.md"
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -169,22 +195,26 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "8a96e7405cabe323",
+  "active": "80a7a33d7444545a",
   "lastOpenFiles": [
-    "picture/Pasted image 20240317090439.png",
+    "picture/Pasted image 20240514233709.png",
+    "picture/Pasted image 20240514233116.png",
+    "picture/Pasted image 20240514231232.png",
+    "picture/Pasted image 20240514223015.png",
+    "picture/Pasted image 20240514222928.png",
+    "picture/Pasted image 20240514221439.png",
+    "picture/Pasted image 20240512175115.png",
+    "picture/Pasted image 20240510221755.png",
+    "picture/Pasted image 20240510221700.png",
+    "picture/Pasted image 20240510002217.png",
+    "picture/Pasted image 20240509235111.png",
+    "Java/五、Java web.md",
+    "计算机网络/一、网络基础.md",
+    "计算机网络/二、负载均衡.md",
+    "计算机网络",
+    "计算机系统",
     "Java/三、Spring 基础.md",
     "Java/四、Spring 组件.md",
-    "Java/五、Java web.md",
-    "picture/Pasted image 20240316000828.png",
-    "picture/Pasted image 20240316000329.png",
-    "picture/Pasted image 20240315232433.png",
-    "picture/Pasted image 20240314231725.png",
-    "picture/Pasted image 20240314230801.png",
-    "picture/Pasted image 20240313225128.png",
-    "picture/Pasted image 20240310175037.png",
-    "picture/Pasted image 20240309225941.png",
-    "picture/Pasted image 20240309224606.png",
-    "picture/Pasted image 20240309224241.png",
     "11.md",
     "Java/一、Java 运行机制与JVM.md",
     "Java/二、Java 语法基础.md",

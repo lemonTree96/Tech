@@ -225,11 +225,22 @@ public class MyListener implements ServletContextListener {
 ##### 2. Server - 服务实例
 &emsp;&emsp;  Service 是对外提供服务的。一个 Server 可以有多个 Service。Service 包含了两个组件 **Container** 和 **Connector**。Container 是一个容器，负责处理请求的，Connector 是负责接受请求，并且将请求提交给 Container。一个 Service 包含**多个 Connector 和一个 Container** ，两者的关联关系使用 Mapper 来做映射。
 ###### (1). Connector - 连接器
-▨  Connector 组件
+**▨  Connector 框架**
 
 &emsp;&emsp; Connector 是客户端连接到 Tomcat 容器的服务点。每个 Connector 都将指定一个端口进行监听，Connector 用于接受请求并将请求封装成 Request 和 Response，然后交给 Container 进行处理，Container 处理完之后在交给 Connector 返回给客户端。连接器主要包括以下核心组件：
 
 ![[../picture/Pasted image 20240316000828.png#pic_center]]
+
+&emsp;&emsp;以 **Http11Protocol** 协议为例，其请求数据处理流程如下图所示：
+&emsp;&emsp;&emsp; ① Tomcat 基于 `server.xml` 的安全协议配置，通过 ServerSocketFactory 创建对应的套接字对象。
+&emsp;&emsp;&emsp;  ② Tomcat 通过 JioEndPoint 建立套接字连接，并通过 *LimitLatch* 进行套接字连接数限制(流量限制)
+&emsp;&emsp;&emsp;  ③ Tomcat通过操作系统的 Socket 套接字获取到请求的字节流（Http字节流），在字节流信息传输过程中，为了提高发送和接收效率，在套接字的发送端与接收端都引入了缓冲区 InternalInputBuffer 。在接收到字节流之后，会首先创建 ByteChunk 字节块（字节数组），将字节流写入到 ByteChunk 缓冲区当中，当缓冲区中的字符数量到达缓冲数组最大值时，将字符数据输出到指定目标中（Acceptor）。
+&emsp;&emsp;&emsp;  ④ Acceptor 接收到套接字请求时，会将创建 SocketProcess 线程任务，并丢进 Executor 线程池中。SocketProcess 会读取套接字字节轮流，并对Http报文进行解析，组成，并生成 Request 对象。
+&emsp;&emsp;&emsp;  ⑤ Request 请求对象通过 Adapter 适配器，将请求传递给 Engine 容器。
+
+![[../picture/Pasted image 20240318230731.png#pic_center|550]]
+
+**▨  Connector 组件**
 
 &emsp;&emsp; **● ProtocolHandler 协议处理器**：传输协议的抽象，将不同通信协议的处理进行了封装常见的通信协议如: Http、AJP。不同的 ProtocolHandler 代表不同的连接类型。Connector使用哪种 Protocol，可以通过 `<connector>` 元素中的 protocol 属性进行指定，也可以使用默认值。指定的 protocol 取值及对应的协议如下：
 &emsp;&emsp;&emsp; ① HTTP/1.1：默认值，使用的协议与Tomcat版本有关
@@ -261,7 +272,7 @@ public class MyListener implements ServletContextListener {
 >&emsp;&emsp;&emsp; ② 当线程池没有达到最大执行线程的时候，会优先开线程再使用任务队列；
 >&emsp;&emsp;&emsp; ③ 扩展计数用于追踪任务的执行情况；
 
-▨  Tomcat Connector相关配置参数
+**▨  Tomcat Connector相关配置参数**
 ```
 1. Endpoint 配置参数：
 	● port：指定Tomcat监听的端口。
@@ -280,3 +291,17 @@ public class MyListener implements ServletContextListener {
 ```
 ><font color=SlateBlue>  <u>**Q1. maxConnections、maxThreads、acceptCount之间的关系 ？**</u></font>
 ![[../picture/Pasted image 20240317090439.png#pic_center|700]]
+###### (2). Container - 容器
+&emsp;&emsp;  Container 负责对内处理业务逻辑，内部由**四个容器**组成，各容器之间的调用都会通过一个通道 **Pipeline-Valve** ( 责任链模式 )。每个 Service 会包含一个 Container 容器。一个 Container 容器由一个引擎可以管理多个 Host 虚拟主机。每个 Host 虚拟主机可以管理多个 Web 应用。每个 Web 应用会有多个 Wrapper 包装器。 Container 容器的请求处理过程就是在 **Engine、Host、Context 和 Wrapper** 这四个容器之间层层调用，最后在 Servlet 中执行对应的业务逻辑。
+&emsp;&emsp;&emsp;● **Engine - 引擎**：表示可运行的Catalina的servlet引擎实例，包含了servlet容器的核心功能。Engine 用来管理多个站点，<font color=green>主要功能是将传入请求委托给适当的虚拟主机处理。一个Service 最多只能有一个Engine。</font>在Tomcat启动过程中，解析 `server.xml` 时碰到一个 Engine 节点就会提交一个异步线程，并在异步线程中执行当前容器及所有子容器的 `backgroundProcess()` 方法，从而实现 Engine 容器中各个子容器的加载。
+
+![[../picture/Pasted image 20240318234134.png#pic_center|290]]
+&emsp;&emsp;&emsp;● **Host - 虚拟主机**：代表一个站点。Host 负责安装和展开这些应用 ( **解析web.xml** )，并且标识这个应用以便能够区分它们。一个虚拟主机下都可以部署一个或者多个Web App，每个Web App对应于一个 Context ，当 Host 获得一个请求时，将把该请求匹配到某个 Context 上，然后把该请求交给该 Context 来处理。如 `http://tomcat.apache.org/index.html`，tomcat.apache.org 被抽象为一个主机。
+&emsp;&emsp;&emsp;● **Context - 应用**：代表一个应用程序，表示Web应用程序本身。Context 最重要的功能就是管理它里面的 Servlet 实例，一个 Context 对应于一个 Web Application，一个 Web Application 由一个或者多个Servlet实例组成。拥有了 Context 就代表 Tomcat 具备了 Servlet 运行的基本环境。
+&emsp;&emsp;&emsp;● **Wrapper - Servlet**：Wrapper 是最底层的容器，每个Wrapper 封装着一个servlet。Wrapper 负责管理一个 Servlet，包括的 Servlet 的装载、初始化、执行以及资源回收。
+
+![[../picture/Pasted image 20240318231635.png#pic_center|650]]
+
+###### (3). Pipeline - 容器管道
+###### (4). Mapper -  URL 映射器
+
