@@ -8,7 +8,7 @@
 &emsp; &emsp; Java中一共有48种关键字，如下表所示。关键字可以分为**程序逻辑控制关键字，系统控制(线程同步)关键字，数据类型关键字，类/对象关键字，包/方法管理关键字**。
 ![[../picture/Pasted image 20240105215809.png#pic_center|750]]
 
-##### 1. *volatile* 类型
+##### 1. volatile 类型
 &emsp; &emsp;当一个变量定义为 ***volatile*** 类型后，该变量将具备两种特性：
 &emsp; &emsp; &emsp; ① <font color=green>**定义为 *volatile* 类型变量会对所有线程保持可见性，即当一个线程修改了这个变量的值，修改后的值对于其他线程来说是可以被立刻获取到**</font>。而普通变量的值在线程间传递均需要通过主内存完成。注意：虽然定义为 *** volatile*** 类型的变量在被执行时可以保证数据一致性，但 Java运算并不是原子操作，所以<font color=red>**定义为 *volatile* 类型的变量在并发下也是线程不安全的**</font>。因此除了以下两种运算场景，其余运算均需要加锁来保证原子性。
 &emsp; &emsp; &emsp; ● 运算结果不依赖变量的当前值，或者能够确保只有单一线程来修改变量的值。
@@ -40,7 +40,7 @@ public class Main {
     }
 }
 ```
-&emsp; &emsp;② 定义为 ***volatile*** 类型变量会<font color=red>**禁止指令重排序优化**</font>。而普通变量仅会保证变量在方法中能够得到正确执行结果，而不保证变量赋值操作顺序与程序代码中逻辑顺序是一致的。( 指令重排序是指CPU采用了允许将多条指令不按程序顺序，分开发送给相应电路单元进行处理，但指令重排不是任意的，CPU需要根据指令依赖情况进行重排，以保证得到正确的执行结果 )
+&emsp; &emsp;② 定义为 **volatile** 类型变量会<font color=red>**禁止指令重排序优化**</font>。而普通变量仅会保证变量在方法中能够得到正确执行结果，而不保证变量赋值操作顺序与程序代码中逻辑顺序是一致的。( 指令重排序是指CPU采用了允许将多条指令不按程序顺序，分开发送给相应电路单元进行处理，但指令重排不是任意的，CPU需要根据指令依赖情况进行重排，以保证得到正确的执行结果 )
 ```java
 Map<String,String> config;
 char [] configText;
@@ -60,8 +60,8 @@ while(!inited){
 }
 doSomethingWithConfig();
 ```
-##### 2. *synchronized* 类型
-&emsp; &emsp; Java中互斥同步方式就是 *synchronized* 关键字。*synchronized* 主要有三种用法：**修饰实例方法，修饰静态方法，修饰代码块**。
+##### 2. synchronized 类型
+&emsp; &emsp; Java中互斥同步方式就是 synchronized 关键字。synchronized 主要有三种用法：**修饰实例方法，修饰静态方法，修饰代码块**。
 &emsp; &emsp;&emsp;  **① 修饰实例方法**: **被修饰的方法称为同步方法，其作用范围是整个方法，作用对象是调用这个方法的对象**，进入同步代码前要获得当前对象实例的锁。
 ```java
 //共享对象数据
@@ -129,7 +129,7 @@ public static void main(String[] args) throws InterruptedException {
  b set over
  num = 200
 ```
-&emsp; &emsp; **② 修饰静态方法**:  **给当前类加锁，会作用于类的所有对象实例 ，其作用的范围是整个静态方法，进入同步代码前要获得当前 *class* 的锁**。<font color=red>如果一个线程A调用一个实例对象的 *non-static-synchronized* 方法，而线程B需要调用这个实例对象所属类的 *static-synchronized* 方法，不会发生互斥情况，因为访问 *static-synchronized* 方法占用的锁是当前类的锁，而访问 *non-static-synchronized* 方法占用的锁是当前实例对象锁。</font>`synchronized void staic method(){ 业务代码 }`
+&emsp; &emsp; **② 修饰静态方法**:  **给当前类加锁，会作用于类的所有对象实例 ，其作用的范围是整个静态方法，进入同步代码前要获得当前 class 的锁**。<font color=red>如果一个线程A调用一个实例对象的 non-static-synchronized 方法，而线程B需要调用这个实例对象所属类的 static-synchronized 方法，不会发生互斥情况，因为访问 static-synchronized 方法占用的锁是当前类的锁，而访问 non-static-synchronized 方法占用的锁是当前实例对象锁。</font>`synchronized void staic method(){ 业务代码 }`
 &emsp; &emsp;&emsp;  **③ 修饰代码块**: 需要指定加锁对象，对给定对象/类加锁。**当多个线程持有的对象监听器为同一个对象时，线程是同步的，同一时间只有一个线程可以访问同步块**，**但是如果是同一个类的不同实例，同步块的执行就是异步的**。 `synchronized(object)` / `synchronized(类.class)` `synchronized(this) { 业务代码 }`
 ```java
 //共享对象数据
@@ -193,7 +193,7 @@ public static void main(String[] args) throws InterruptedException {
  B end
  A end
 ```
-#### 2.2.2 *Package* 与 *Import*  机制
+#### 2.2.2 Package 与 Import  机制
 &emsp; &emsp; Java引入了包机制，用于解决类名冲突与类文件管理等问题(类似于C++中的`namespace`)。Java允许将一组功能相关的类放在同一个`Package`下，构成类库单元。当Java程序文件中使用了`Package`语句时，则该程序文件中定义的所有类都在这个`Package`下。同时，在父包下可以创建子包，<font color=green>虽然父包和子包存在某种联系，但在用法上没有任何关系，如在父包类中需要使用子包中的类时，必须使用子包的全名，而不能省略父包部分</font>。 同时Java引入了`import`机制，可以向某个Java文件中指定包层次下的某个类或全部类。
 ```java
 //t1Class.java
@@ -206,16 +206,16 @@ package Test.A			//子包
 public class t2Class()
 ```
 ### 2.3 Java 类与对象
-#### 2.3.1  *Class*类 / 对象 - 类的元数据
-##### 1. *Class*类概述
-&emsp; &emsp; 在 Java 中，一切皆对象。Java分为两种对象：<font color=red>**Java 实例对象 和 Java Class 对象(字节码文件描述对象)**</font>。每个类的运行时的类型信息就是用 *Class* 对象表示的。它包含了与类有关的信息。每一个类有且只有一个 *Class* 对象，*Class* 对象对应 `java.lang.Class` 类，是对类的抽象和集合，是类的字节码文件描述对象。*Class* 类的特点如下：
-&emsp; &emsp;&emsp; ● 自定义的类在编译后会<font color=green>**生成一个唯一的 *Class* 对象**，***Class* 对象保存在与自定义类同名的 *.class* 文件中**</font>。
-&emsp;&emsp;&emsp;  ●<font color=green> **无论创建多少个自定义类的对象，有且只有一个 *Class* 对象**</font>，表示自定义类的类型信息。
-&emsp; &emsp;&emsp; ● Class 类没有公共的构造方法，<font color=green>**仅在类加载的过程中，由 *jvm* 自动构造，因此不能显式的声明一个 *Class* 对象**</font>。
+#### 2.3.1  Class类 / 对象 - 类的元数据
+##### 1. Class类概述
+&emsp; &emsp; 在 Java 中，一切皆对象。Java分为两种对象：<font color=red>**Java 实例对象 和 Java Class 对象(字节码文件描述对象)**</font>。每个类的运行时的类型信息就是用 *Class* 对象表示的。它包含了与类有关的信息。每一个类有且只有一个 Class 对象，Class 对象对应 `java.lang.Class` 类，是对类的抽象和集合，是类的字节码文件描述对象。Class 类的特点如下：
+&emsp; &emsp;&emsp; ● 自定义的类在编译后会<font color=green>**生成一个唯一的 Class 对象**，***Class* 对象保存在与自定义类同名的 .class 文件中**</font>。
+&emsp;&emsp;&emsp;  ●<font color=green> **无论创建多少个自定义类的对象，有且只有一个 Class 对象**</font>，表示自定义类的类型信息。
+&emsp; &emsp;&emsp; ● Class 类没有公共的构造方法，<font color=green>**仅在类加载的过程中，由 jvm 自动构造，因此不能显式的声明一个 Class 对象**</font>。
 ![[../picture/Pasted image 20240106220329.png#pic_center|500]]
 ><font color=SlateBlue>  <u>**Q1. Class类的作用 ？**</u></font>
 &emsp;&emsp;&emsp; 在C++中有个重要的概念：<font color=red>**运行时类型识别(`RTTI`)**</font>，其作用是在运行时识别一个对象的类型和类的信息。java中同样存在`RTTI`，java中的`RTTI`实现有两种方式：
-&emsp;&emsp; &emsp; ● <font color=green>在编译期已确定其所有对象的类型，这种方式需要在写程序的时候将对象通过 *new* 创建出来</font>。
+&emsp;&emsp; &emsp; ● <font color=green>在编译期已确定其所有对象的类型，这种方式需要在写程序的时候将对象通过 new 创建出来</font>。
 &emsp; &emsp; &emsp; ● 通过反射机制，在运行时发现和使用类型的信息。在java中用来表示运行时类型信息的对应类就是Class类。
 ```java
 1. Class类常用的方法:
@@ -239,9 +239,9 @@ public class t2Class()
 ##### 2. Class类包含的信息
 &emsp; &emsp; Class类由类加载器从 *.class* 文件中加载，并在 *jvm* 中生成该类的 Class 对象，每一个Class对象都关联着定义它的那个类加载器。每个Class类中包含的信息有 *field* (字段)，*method* (方法)、*constructor* (构造函数)，将这些信息的共有特性分别封装成一个类，就分别对应 *Field* 类， *Method* 类、 *Constructor* 类。
 ![[../picture/Pasted image 20240106220701.png#pic_center|500]]
-&emsp; &emsp; &emsp;  ● ***Constructor*** 类：代表某个类中的一个构造方法 
-&emsp; &emsp; &emsp; ● ***Method*** 类：代表某个类中的一个成员方法 
-&emsp; &emsp;  &emsp; ● ***Field*** 类：代表某个类中的一个成员变量
+&emsp; &emsp; &emsp;  ● **Constructor** 类：代表某个类中的一个构造方法 
+&emsp; &emsp; &emsp; ● **Method** 类：代表某个类中的一个成员方法 
+&emsp; &emsp;  &emsp; ● **Field** 类：代表某个类中的一个成员变量
 ```java
 package test
 public class ReflectClass {
@@ -642,7 +642,7 @@ class CallableExample implements Callable {
 &emsp; &emsp;&emsp; 线程安全的本质是为了保证线程数据的安全，在Java中可以使用 *ThreadLocal*  维护变量，从而可以不再使用锁，同步器等工具实现线程的同步。
 ![[../picture/Pasted image 20240121163427.png#pic_center|580]]
 
-##### 1. *ThreadLocal* - 任务实体中的"共享/全局"变量
+##### 1. ThreadLocal - 任务实体中的"共享/全局"变量
 &emsp; &emsp; 为了保证线程的数据安全，在Java中可以使用 ThreadLocal 维护变量，ThreadLocal为每个使用该变量的线程提供<font color=green>**独立的局部变量副本**</font>，每一个线程都可以独立地改变自己的副本，通过 set() 和 get() 来对这个局部变量进行操作，但不会和其他线程的局部变量进行冲突，实现了线程的数据隔离。
 ![[../picture/Pasted image 20240121163529.png#pic_center|580]]
 ><font color=SlateBlue>  <u>**Q1.ThreadLocal 是如何实现线程 (数据) 隔离的 ？**</u></font>
@@ -659,7 +659,7 @@ class CallableExample implements Callable {
 &emsp;&emsp;&emsp;●   <font color=green>虽然 Entry 对象中的 ThreadLocal 引用为弱引用，但这个弱引用只是针对key的。当把 Threadlocal 实例置为null以后，没有任何强引用指向 Threadlocal 实例，此时 Threadlocal 将会被gc回收。</font><font color=orange>虽然 ThreadLocal 被回收了，但是 Entry 对象中的value却不能回收，因为存在一条从`Current Thread`连接过来的强引用。只有当前Thread结束以后, `Current thread`就不会存在栈中，连接value的强引用断开。此时Current Thread, ThreadLocalMap, Entry-value将全部被GC回收。</font>
 &emsp;&emsp;&emsp;●  根据上述 ThreadLocal 内存回收的过程可以看出，<font color=red>只要当前的线程对象被GC回收，ThreadLocal 就不会出现内存泄露的情况。</font>但如果是在<font color=red>使用线程池</font>的时候，线程结束是不会销毁的，会再次使用的。就可能出现内存泄露。<font color=red>因此，当使用完 ThreadLocal 之后，调用`Threadlocal`的`remove()`方法把当前`ThreadLocal`从当前线程的`ThreadLocalMap`中移除。</font>
 
-##### 2. *InheritableThreadLocal* ( ITL )
+##### 2. InheritableThreadLocal ( ITL )
 &emsp; &emsp; 虽然 *ThreadLocal* 为每个使用该变量的线程提供<font color=green>**独立的局部变量副本**</font>，使当前线程变量不会和其他线程的局部变量进行冲突。但是在父线程中创建的本地变量是无法传递给子线程的，因此Java提供了<font color=red>`InheritableThreadLocal (ITL)`来解决线程在继承过程中变量的传递问题。</font>
 ```java
 public static void main(String[] args) throws InterruptedException {
@@ -676,9 +676,10 @@ public static void main(String[] args) throws InterruptedException {
 ```
 ><font color=SlateBlue>  <u>**Q1. InheritableThreadLocal 是如何实现线程本地变量继承的 ？**</u></font>
 &emsp;&emsp;&emsp;`InheritableThreadLocal`是 ThreadLocal 的子类。在线程在创建并初始化时，会检查其父线程是否存在 inheritableThreadLocals，如果存在则会在父线程的 inheritableThreadLocals 的基础上创建子线程。
+>
 ![[../picture/Pasted image 20240121165120.png#pic_center|650]]
 
-##### <font color=Sienna>**3. *TransmittableThreadLocal* ( TTL )**</font>
+##### <font color=Sienna>3. TransmittableThreadLocal (TTL)</font>
 &emsp; &emsp;TL 解决了不同线程之间使用同一本地变量时的冲突问题，ITL解决了在线程继承中，本地变量从父线程传递(继承)到子线程的问题。但在ITL中仅解决了线程继承这一瞬间的变量传递问题，如果创建子线程一直被池化复用 ( 如线程池中的子线程)，则父线程与子线程之间的变量无法进行同步，则会导致数据问题。针对该问题，AliBaba 在ITL的基础上提出了TTL，<font color=green>**用来解决子线程池化复用时的变量数据（此时的变量数据可以看做是业务逻辑的上下文）传递问题**。</font>
 &emsp; &emsp;&emsp; TTL 为了能够在子线程池化复用的过程中保持变量数据的一致性，TTL 对原有的 `Runnable` 进行了改造，实现了 `TtlRunnable` 。通过**CRR模式 `(capture[抓取]，replay[回放]，restore[恢复])`** 对上下文的数据进行同步。
 ![[../picture/Pasted image 20240121165342.png#pic_center|600]]
@@ -690,6 +691,91 @@ public static void main(String[] args) throws InterruptedException {
 &emsp; &emsp;&emsp; ② 工作线程：线程池中线程，在没有任务时处于等待状态；
 &emsp; &emsp;&emsp; ③ 任务接口：为工作线程提供任务； 
 &emsp; &emsp;&emsp; ④ 任务队列：用于存放没有处理的任务。
+
+### 2.9 Java 代理模式
+&emsp;&emsp; 代理是一种常用的设计模式，其目的就是为其他对象提供一个代理以控制对某个对象的访问。代理模式可以在不修改被代理对象的基础上，通过扩展代理类，进行一些功能的附加与增强。**在Java中，存在三种代理模式：<font color=red>静态代理(设计模式中介绍)，jdk 动态代理 ( 代理类是由JDK在运行时动态生成 )，cglib 代理。</font>**
+
+#### 2.9.1 动态代理
+&emsp;&emsp; 动态代理中的所谓"动态"，是相对于使用Java代码实际编写静态代理而言，"动态"的优势并不是省去了编写代理类的工作量，而是<font color=green>实现了可以在原始接口和原始类未知的时候，就确定了代理类的代理行为</font>，即动态代理类不再是针对某一特定的已知的类接口进行代理，当动态代理类与原始类"脱离直接联系"时，可以复用于其他不同的场景中。动态代理分为 **JDK 动态代理** (基于接口代理) 和 **cglib 动态代理** (基于继承代理) 两种方式。动态代理的作用如下：
+&emsp;&emsp;&emsp; ● **增强对象的功能**：通过动态代理，可以在不修改原始对象的情况下，对其方法进行增强或添加额外的行为。可以在方法执行前后进行一些操作，比如日志记录、性能监测、事务管理等。
+&emsp;&emsp;&emsp; ●  **解耦和业务逻辑分离**：动态代理可以将对象的特定操作从业务逻辑中解耦，使得代码更加模块化和可维护。代理对象可以负责处理一些通用的横切关注点，而业务对象可以专注于核心业务逻辑。
+&emsp;&emsp;&emsp; ● **实现懒加载**：通过动态代理，可以延迟加载对象，只有在真正需要使用对象时才会进行创建和初始化，从而提高性能和资源利用效率。
+&emsp;&emsp;&emsp; ● **实现AOP编程**：动态代理是实现面向切面编程(AOP)的基础。通过代理对象，可以将横切关注点（如日志、事务、安全性）与业务逻辑进行解耦，提供更高层次的模块化和可重用性。
+><font color=SlateBlue><u>**Q1. 动态代理与静态代理的区别 ？**</u></font>
+&emsp;&emsp;&emsp;① 加载被代理类的时机不同: 静态代理在编译时就已经实现，编译完成后代理类是一个实际的 *class* 文件。动态代理是在运行时动态生成的，即编译完成后没有实际的 *class* 文件，而是在**运行时动态生成类字节码，并加载到 JVM中**。
+&emsp;&emsp;&emsp;② 静态代理代理对象要实现与目标(被代理)对象一致的接口，而<font color=green>**动态代理对象不需要实现接口，需要实现 InvocationHandler 接口，但目标(被代理) 对象必须实现接口**</font>，否则不能使用动态代理。
+
+##### 1. JDK动态代理 - 基于反射 & 接口方式
+&emsp;&emsp;动态代理通过 java jdk 实现，通过 Proxy 的静态方法 <font color=red>newProxyInstance</font> 动态创建代理。
+```java
+public static Object newProxyInstance(ClassLoader loader,
+                                          Class<?>[] interfaces,InvocationHandler h)
+// loader - 类加载器，用于加载被代理类到jvm
+// interfaces - 要用来代理的接口,即被代理的类的接口
+// InvocationHandler - 每个代理的实例都有一个与之关联的 InvocationHandler 实现类，如果代理的方法被调用，那么代理便会通知和转发给内部的 InvocationHandler 实现类，由它决定处理。
+```
+
+&emsp;&emsp; 动态代理类的生成机制主要通过 `java.lang.reflect.Proxy` 类和 `java.lang.reflect.InvocationHandler` 接口实现。`InvocationHandler` 是动态代理的核心接口之一，当使用动态代理模式创建代理对象时，每当对代理对象执行方法调用时，调用的方法不会直接执行，而是转发到实现了`InvocationHandler` 的 `invoke` 方法上。在这个 `invoke` 方法内部，我们可以定义拦截逻辑、调用原始对象的方法、修改返回值等操作。
+
+![[../picture/Pasted image 20240602173259.png]] 
+
+&emsp; &emsp; ① `Proxy.newProxyInstance()` 方法是动态代理的入口，在第一次创建代理对象时，`Proxy.newProxyInstance()` 会从 proxyClassCache 缓存中检查是否有已经生成的代理类。
+&emsp; &emsp; &emsp; ② 如果缓存中存在，则会使用缓存中的代理类。
+&emsp; &emsp; &emsp; ③ 如果缓存中不存在，则最终调用 `ProxyGenerator.generateProxyClass()`方法来动态生成一个实现了所有给定接口的新类。这个新生成的类通常命名为 \$Proxy0，$Proxy1 等，每个代理类对应一个唯一的代理实例。一旦生成，这个代理类就会被缓存，后续的相同接口的代理对象创建将直接复用这个类，而不再重新生成。
+
+><font color=SlateBlue><u>**Q1. JDK 动态代理缓存为什么使用 WeakCache ？**</u></font>
+&emsp; &emsp; WeakCache 是一个具有二级缓存的弱引用类，一级缓存的 key 是弱引用，二级缓存是强引用。其中一级缓存的 key 是根据入参直接传入的，二级缓存的 key 和 value 是根据一级缓存的 key 和 value 通过各自的工厂方法( subKeyFactory 和 valueFactory )计算得到的。当弱引用被GC回收后，二级缓存强引用会被以惰性 ( lazily ) 方式被删除。由于 **jdk 动态代理生成的代理类占用内存较大，为了不影响GC对内存的回收**，jdk 动态代理使用 WeakCache 作为生成的动态代理类的缓存。
+
+&emsp; &emsp; JDK 动态代理的使用案例如下：
+```java
+public static Object newProxyInstance(ClassLoader loader,Class<?>[] interfaces, InvocationHandler h)
+  
+// ============================================
+// 1.Trains接口，抽象主题角色
+public interface Trains {
+    public void run();
+}
+// ============================================
+// 2.Trains接口实现，被代理的角色
+public class SlowTrains implements Trains {
+    @Override
+    public void run() {
+        System.out.println("火车开车了");
+    }
+}
+// ============================================
+// 3.动态代理类，代理了被代理类，对被代理类进行了增强，通过实现 InvocationHandler 接口创建自己的动态代理器
+public class Shop implements InvocationHandler {
+    private Trains trains;  //引入要代理的对象
+    public Shop(Trains trains){
+        this.trains = trains;
+    }
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("本商店代售火车票");
+        method.invoke(trains,args);
+        System.out.println("结束");
+        return null;
+    }
+}
+// ============================================
+// 4. 主函数，动态代理的使用
+	Trains trains = new SlowTrains();
+	Trains trains1 = (Trains) Proxy.newProxyInstance(
+    				SlowTrains.class.getClassLoader(), SlowTrains.class.getInterfaces(),new Shop(trains));
+  trains1.run();
+```
+
+##### 2. cglib代理 - 基于字节码 & 继承方式
+&emsp; &emsp; cglib 是一个强大的、高性能的**代码生成库**。cglib 代理代理为控制要访问的目标对象提供了一种途径，通过对**字节码**进行操作，当访问对象时，它引入了一个间接的层(代理层)，以控制对象的访问。<font color=red>**cglib 的应用本质是为那些<font color=green>没有接口的类创建一个代理对象</font>，从而实现对原有代码的增强，拦截等操作**</font>。cglib 主要应用场景如下:
+&emsp; &emsp; ① 广泛的应用于 AOP 的框架使用，例如：Spring AOP和dynaop，为他们提供方法的 intercep (拦截器策略)。 
+&emsp; &emsp; ② Hibernate (ORM 持久层框架) 使用 cglib 来代理单端 single-ended (多对一、一对一)关联。 
+&emsp; &emsp; ③ EasyMock 和 jMock 是通过使用模仿(moke) 对象来测试 java 代码的包。
+
+![[../picture/Pasted image 20240602231211.png#pic_center|350]]
+
+
+
 
 ### 2.12 Java 数据库 - JDBC
 &emsp;&emsp; JDBC的全称是Java数据库连接 ( Java Database Connect )，它是一套用于执行SQL语句的 Java API。应用程序可通过这套API连接到关系数据库，并使用SQL语句来完成对数据库中数据的查询、更新和删除等操作。

@@ -4,68 +4,54 @@
     "type": "split",
     "children": [
       {
-        "id": "aa89f68a232afbde",
+        "id": "0223b8f4a411826a",
         "type": "tabs",
-        "dimension": 40.117994100294986,
+        "dimension": 44.00977995110024,
         "children": [
           {
-            "id": "8a96e7405cabe323",
+            "id": "b044eeec3d2fdcb8",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java/五、Java web.md",
-                "mode": "source",
-                "source": true
-              }
-            }
-          },
-          {
-            "id": "80a7a33d7444545a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计算机网络/一、网络基础.md",
+                "file": "数据传输体系/二、MQ 异步通信.md",
                 "mode": "source",
                 "source": true
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       },
       {
-        "id": "41d4fcb1f6328d3b",
+        "id": "20e5a0dc13de3aa3",
         "type": "tabs",
-        "dimension": 59.882005899705014,
+        "dimension": 55.99022004889976,
         "children": [
           {
-            "id": "e901000b0f833745",
+            "id": "d49cf7821f385204",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java/五、Java web.md",
+                "file": "数据传输体系/二、MQ 异步通信.md",
                 "mode": "preview",
                 "source": true
               }
             }
           },
           {
-            "id": "1a1203a54b27f041",
+            "id": "7525d43bfd70773d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机网络/一、网络基础.md",
+                "file": "Java/四、Spring 组件.md",
                 "mode": "preview",
                 "source": true
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -132,7 +118,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计算机网络/一、网络基础.md",
+                "file": "数据传输体系/二、MQ 异步通信.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -149,7 +135,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计算机网络/一、网络基础.md",
+                "file": "数据传输体系/二、MQ 异步通信.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -172,12 +158,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "计算机网络/一、网络基础.md"
+                "file": "数据传输体系/二、MQ 异步通信.md"
               }
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -195,33 +181,35 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "80a7a33d7444545a",
+  "active": "b044eeec3d2fdcb8",
   "lastOpenFiles": [
-    "picture/Pasted image 20240514233709.png",
-    "picture/Pasted image 20240514233116.png",
-    "picture/Pasted image 20240514231232.png",
-    "picture/Pasted image 20240514223015.png",
-    "picture/Pasted image 20240514222928.png",
-    "picture/Pasted image 20240514221439.png",
-    "picture/Pasted image 20240512175115.png",
-    "picture/Pasted image 20240510221755.png",
-    "picture/Pasted image 20240510221700.png",
-    "picture/Pasted image 20240510002217.png",
-    "picture/Pasted image 20240509235111.png",
+    "picture/Pasted image 20240804232212.png",
+    "picture/Pasted image 20240804184459.png",
+    "picture/Pasted image 20240804104116.png",
+    "picture/Pasted image 20240803224130.png",
+    "picture/Pasted image 20240803213046.png",
+    "picture/Pasted image 20240803180608.png",
+    "picture/Pasted image 20240803180530.png",
+    "picture/Pasted image 20240803162205.png",
+    "picture/Pasted image 20240803154405.png",
+    "picture/Pasted image 20240720191248.png",
+    "picture/Pasted image 20240720185147.png",
     "Java/五、Java web.md",
-    "计算机网络/一、网络基础.md",
+    "数据传输体系/二、MQ 异步通信.md",
+    "Java/四、Spring 组件.md",
     "计算机网络/二、负载均衡.md",
+    "数据传输体系/一、RPC 远程过程调用.md",
+    "数据存储结构/一、数据结构与算法.md",
+    "数据存储结构/二、MySQL.md",
+    "Java/二、Java 语法基础.md",
+    "Java/三、Spring 基础.md",
+    "数据存储结构/三、Redis.md",
+    "计算机网络/一、网络基础.md",
     "计算机网络",
     "计算机系统",
-    "Java/三、Spring 基础.md",
-    "Java/四、Spring 组件.md",
     "11.md",
     "Java/一、Java 运行机制与JVM.md",
-    "Java/二、Java 语法基础.md",
-    "数据存储结构/二、MySQL.md",
     "a.md",
-    "数据存储结构/一、数据结构与算法.md",
-    "数据存储结构/三、Redis.md",
     "数据传输体系",
     "分布式架构",
     "picture",
