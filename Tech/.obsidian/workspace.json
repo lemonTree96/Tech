@@ -4,51 +4,43 @@
     "type": "split",
     "children": [
       {
-        "id": "0223b8f4a411826a",
+        "id": "5c691f66d0f51f52",
         "type": "tabs",
-        "dimension": 44.00977995110024,
+        "dimension": 42.53986332574032,
         "children": [
           {
-            "id": "b044eeec3d2fdcb8",
+            "id": "9ca917ddfde1a087",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "数据传输体系/二、MQ 异步通信.md",
+                "file": "数据存储结构/三、Redis.md",
                 "mode": "source",
                 "source": true
-              }
+              },
+              "icon": "lucide-file",
+              "title": "三、Redis"
             }
           }
         ]
       },
       {
-        "id": "20e5a0dc13de3aa3",
+        "id": "6ae208ff7deffda2",
         "type": "tabs",
-        "dimension": 55.99022004889976,
+        "dimension": 57.46013667425968,
         "children": [
           {
-            "id": "d49cf7821f385204",
+            "id": "e3be215c498569b6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "数据传输体系/二、MQ 异步通信.md",
+                "file": "数据存储结构/三、Redis.md",
                 "mode": "preview",
                 "source": true
-              }
-            }
-          },
-          {
-            "id": "7525d43bfd70773d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/四、Spring 组件.md",
-                "mode": "preview",
-                "source": true
-              }
+              },
+              "icon": "lucide-file",
+              "title": "三、Redis"
             }
           }
         ]
@@ -70,8 +62,10 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "byCreatedTimeReverse"
-              }
+                "sortOrder": "alphabeticalReverse"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
             }
           },
           {
@@ -86,7 +80,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
             }
           },
           {
@@ -94,14 +90,16 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 200,
+    "width": 338.5,
     "collapsed": true
   },
   "right": {
@@ -126,7 +124,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 二、MQ 异步通信"
             }
           },
           {
@@ -138,7 +138,9 @@
                 "file": "数据传输体系/二、MQ 异步通信.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 二、MQ 异步通信"
             }
           },
           {
@@ -149,7 +151,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -158,8 +162,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "数据传输体系/二、MQ 异步通信.md"
-              }
+                "file": "数据存储结构/三、Redis.md"
+              },
+              "icon": "lucide-list",
+              "title": "三、Redis 的大纲"
             }
           }
         ],
@@ -181,34 +187,35 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "b044eeec3d2fdcb8",
+  "active": "e3be215c498569b6",
   "lastOpenFiles": [
-    "picture/Pasted image 20240804232212.png",
-    "picture/Pasted image 20240804184459.png",
-    "picture/Pasted image 20240804104116.png",
-    "picture/Pasted image 20240803224130.png",
-    "picture/Pasted image 20240803213046.png",
-    "picture/Pasted image 20240803180608.png",
-    "picture/Pasted image 20240803180530.png",
-    "picture/Pasted image 20240803162205.png",
-    "picture/Pasted image 20240803154405.png",
-    "picture/Pasted image 20240720191248.png",
-    "picture/Pasted image 20240720185147.png",
-    "Java/五、Java web.md",
-    "数据传输体系/二、MQ 异步通信.md",
-    "Java/四、Spring 组件.md",
-    "计算机网络/二、负载均衡.md",
-    "数据传输体系/一、RPC 远程过程调用.md",
-    "数据存储结构/一、数据结构与算法.md",
-    "数据存储结构/二、MySQL.md",
-    "Java/二、Java 语法基础.md",
-    "Java/三、Spring 基础.md",
-    "数据存储结构/三、Redis.md",
     "计算机网络/一、网络基础.md",
+    "AI",
+    "数据存储结构/三、Redis.md",
+    "计算机网络/二、负载均衡.md",
+    "数据传输体系/二、MQ 异步通信.md",
+    "数据存储结构/二、MySQL.md",
+    "数据存储结构/一、数据结构与算法.md",
+    "picture/Pasted image 20250112180937.png",
+    "picture/Pasted image 20250111235733.png",
+    "picture/Pasted image 20250111220403.png",
+    "picture/Pasted image 20250111190424.png",
+    "picture/Pasted image 20250105170755.png",
+    "picture/Pasted image 20250104230240.png",
+    "picture/Pasted image 20250105155532.png",
+    "picture/Pasted image 20250104191908.png",
+    "picture/Pasted image 20250102233441.png",
+    "picture/Pasted image 20250102231417.png",
+    "数据传输体系/一、RPC 远程过程调用.md",
+    "Java/三、Spring 基础.md",
+    "Java/一、Java 运行机制与JVM.md",
+    "Java/五、Java web.md",
+    "Go",
+    "Java/四、Spring 组件.md",
+    "Java/二、Java 语法基础.md",
     "计算机网络",
     "计算机系统",
     "11.md",
-    "Java/一、Java 运行机制与JVM.md",
     "a.md",
     "数据传输体系",
     "分布式架构",
@@ -217,7 +224,6 @@
     "未命名文件夹",
     "image-20231008230652146.md",
     "image-20231008230652146 2.png.md",
-    "Java",
-    "数据存储结构"
+    "Java"
   ]
 }

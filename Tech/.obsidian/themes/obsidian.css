@@ -7,7 +7,7 @@ body{
 	--accent-h: 153;
     --accent-s: 47%;
     --accent-l: 49%;
-    --file-line-width:50rem;  //栏宽调整
+    --file-line-width:65rem;  //栏宽调整
 	--icon-color-hover: hsl(var(--interactive-accent-hsl));	
 	--background-modifier-message: hsl(var(--interactive-accent-hsl));
     --background-modifier-hover: hsla(var(--interactive-accent-hsl), 0.05);

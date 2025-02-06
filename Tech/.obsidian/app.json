@@ -7,5 +7,6 @@
   "livePreview": false,
   "readableLineLength": true,
   "showLineNumber": true,
-  "useMarkdownLinks": false
+  "useMarkdownLinks": false,
+  "promptDelete": false
 }
