@@ -6,7 +6,7 @@
       {
         "id": "5c691f66d0f51f52",
         "type": "tabs",
-        "dimension": 42.53986332574032,
+        "dimension": 32.630979498861045,
         "children": [
           {
             "id": "9ca917ddfde1a087",
@@ -21,16 +21,59 @@
               "icon": "lucide-file",
               "title": "三、Redis"
             }
+          },
+          {
+            "id": "66cb676e38f1bee8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/四、Spring 组件.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "四、Spring 组件"
+            }
+          },
+          {
+            "id": "47200b528f8dc5a0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AI/一、人工智能.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "一、人工智能"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "6ae208ff7deffda2",
         "type": "tabs",
-        "dimension": 57.46013667425968,
+        "dimension": 67.36902050113895,
         "children": [
           {
             "id": "e3be215c498569b6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Java/四、Spring 组件.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "四、Spring 组件"
+            }
+          },
+          {
+            "id": "ef90acfaa28a1f1b",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -41,6 +84,20 @@
               },
               "icon": "lucide-file",
               "title": "三、Redis"
+            }
+          },
+          {
+            "id": "e7d92c2fee602c40",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AI/一、人工智能.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "一、人工智能"
             }
           }
         ]
@@ -187,11 +244,17 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "e3be215c498569b6",
+  "active": "66cb676e38f1bee8",
   "lastOpenFiles": [
+    "picture/Pasted image 20250216150030.png",
+    "数据存储结构/三、Redis.md",
+    "Java/四、Spring 组件.md",
+    "AI/一、人工智能.md",
+    "picture/Pasted image 20250209223554.png",
+    "picture/Pasted image 20250209212605.png",
+    "picture/Pasted image 20250206231720.png",
     "计算机网络/一、网络基础.md",
     "AI",
-    "数据存储结构/三、Redis.md",
     "计算机网络/二、负载均衡.md",
     "数据传输体系/二、MQ 异步通信.md",
     "数据存储结构/二、MySQL.md",
@@ -203,15 +266,11 @@
     "picture/Pasted image 20250105170755.png",
     "picture/Pasted image 20250104230240.png",
     "picture/Pasted image 20250105155532.png",
-    "picture/Pasted image 20250104191908.png",
-    "picture/Pasted image 20250102233441.png",
-    "picture/Pasted image 20250102231417.png",
     "数据传输体系/一、RPC 远程过程调用.md",
     "Java/三、Spring 基础.md",
     "Java/一、Java 运行机制与JVM.md",
     "Java/五、Java web.md",
     "Go",
-    "Java/四、Spring 组件.md",
     "Java/二、Java 语法基础.md",
     "计算机网络",
     "计算机系统",

@@ -14,7 +14,9 @@
 &emsp;&emsp;&emsp;  ◎ ***HttpClient***：是 _Apache Jakarta Common_ 下的子项目，用来提供高效的、最新的、功能丰富的支持HTTP协议的客户端编程工具包。    
 &emsp;&emsp;&emsp;  ◎<font color=red>***OkHttp***</font>：是由 Square 公司研发并开源的，处理 HTTP 网络请求的依赖库。单例模式下，_HttpClient_ 的响应速度要更快一些，非单例模式下，_OkHttp_ 的性能更好。
 &emsp;&emsp;&emsp; *Feign* 是一个 HTTP 客户端框架，它并没有去做跟 _HttpClient_ 或 _OkHttp_ 一样重复的事情，而是开发了一个框架，用于**集成 _HttpURLConnection_，_Apache Http Client_，_OkHttp_ 实现具体的 HTTP 请求**，并提供了更加丰富实用的功能。在 _Feign_ 的实现下，我们只需要创建一个接口并使用注解的方式来配置它，即可完成对服务提供方的接口绑定。
+
 ![[../picture/Pasted image 20231125222416.png#pic_center|250]]
+
 #### 4.3.1 Feign 功能架构
 &emsp;&emsp; *Feign* 是一个 _HTTP_ 请求调用的轻量级框架，可以以 Java 接口**注解的方式**调用HTTP请求。_Fegin_ 主要包含了三大功能：**简化远程调用**、**负载均衡  *Ribbon*、服务容错与熔断机制 *Hystrix***。    
 &emsp;&emsp;&emsp;  ◎ 简化远程调用： _Feign_ 通过处理注解，将请求模板化，当实际调用的时候，传入参数，根据参数再应用到请求上，进而转化成真正的请求，封装了 _HTTP_ 调用流程。_Fegin_ 的灵感来自于 _Retrofit_、_JAXRS-2.0_ 和 _WebSocket_。    
@@ -25,9 +27,9 @@
 ![[../picture/Pasted image 20231125231834.png#pic_center|400]]
 #### 4.3.2 Feign 底层原理
 ##### 1. Feign 的装载与调用
-&emsp;&emsp;在微服务启动时，Feign 会进行包扫描，对加 *@FeignClient* 注解的接口，按照注解的规则，创建远程接口的本地 *JDK Proxy* 代理实例。然后，将这些本地Proxy代理实例，注入到 *Spring IOC* 容器中。当远程接口的方法被调用，由 *Proxy* 代理实例去完成真正的远程访问，并且返回结果。Fegin 的装载与调用过程主要分为三个步骤：**(1). *Fegin* 相关 *Bean* 的注册；(2). *Fegin* 相关 *Bean* 的依赖注入**；**(3).** 
-###### (1). _Feign_ 相关 *Bean* 的注册
-**▧  *Feign* 启动注解：*@EnableFeignClients* -> *@Import(FeignClientsRegistrar.class)***
+&emsp;&emsp;在微服务启动时，Feign 会进行包扫描，对加 *@FeignClient* 注解的接口，按照注解的规则，创建远程接口的本地 *JDK Proxy* 代理实例。然后，将这些本地Proxy代理实例，注入到 *Spring IOC* 容器中。当远程接口的方法被调用，由 *Proxy* 代理实例去完成真正的远程访问，并且返回结果。Fegin 的装载与调用过程主要分为三个步骤：**(1). Fegin 相关 Bean 的注册；(2). Fegin 相关 *Bean* 的依赖注入**
+###### (1). Feign相关Bean的注册
+**▧  Feign 启动注解：@EnableFeignClients -> @Import(FeignClientsRegistrar.class)**
 
 &emsp;&emsp; 在 Spring 项目启动阶段，Spring 会去扫描启动类是否存在 _@EnableFeignClients_ 注解，_@EnableFeignClients_ 注解是开启 _Fegin_ 功能的关键。在 _@EnableFeignClients_ 注解中，`@Import(FeignClientsRegistrar.class)` 会导入自动装载注册器 _FeignClientsRegistrar_ 类，对 _Feign_ 接口进行加载。 
 ```java
@@ -47,13 +49,15 @@ public class Application {
 public @interface EnableFeignClients {...}
 ```
 
-**▧  *FeignClientsRegistrar* 注册到 IoC 容器**
+**▧  FeignClientsRegistrar 注册到 IoC 容器**
 
-&emsp;&emsp;_FeignClientsRegistrar_ 类继承 Spring 中的 _ImportBeanDefinitionRegistrar_ 接口，并在 `registerBeanDefinitions(...)` 实现方法中向 *Spring* 容器注册 *Bean*，以达到自动注入第三方功能的目的。
-&emsp; &emsp;&emsp;&emsp;   ①  在 `registerBeanDefinitions(...)` 方法中首先调用 `registerDefaultConfiguration(...)`方法从 _@EnableFeignClients_ 注解中提取 _defaultConfiguration_ 属性对应的 _Value_，并封装为 _**FeignClientSpecification**_ 作为默认的 _Feign_ 配置注册到 Spring 容器中。    
-&emsp; &emsp;&emsp;&emsp; ② 然后调用 `registerFeignClients(...)` 查找指定路径 _basePackage_ 的所有带有 _@FeignClients_ 注解的类、接口，将带有 _@FeignClients_ 注解的类、接口包装成 <font color=red>_**FeignClientFactoryBean**_ </font>注册到 Spring 容器。_FeignClientFactoryBean_ 类实现了 _FactoryBean<T>_，可以通过 `getObject()` 方法来获取并注入实例化对象。
+&emsp;&emsp; FeignClientsRegistrar 类继承 Spring 中的 ImportBeanDefinitionRegistrar 接口，并在 `registerBeanDefinitions(...)` 实现方法中向 *Spring* 容器注册 *Bean*，以达到自动注入第三方功能的目的。
+&emsp; &emsp;&emsp;&emsp;   ①  在 `registerBeanDefinitions(...)` 方法中首先调用 `registerDefaultConfiguration(...)`方法从 @EnableFeignClients 注解中提取 defaultConfiguration 属性对应的 Value，并封装为 **FeignClientSpecification** 作为默认的 Feign 配置注册到 Spring 容器中。    
+&emsp; &emsp;&emsp;&emsp; ② 然后调用 `registerFeignClients(...)` 查找指定路径 basePackage 的所有带有 @FeignClients 注解的类、接口，将带有 @FeignClients 注解的类、接口包装成 <font color=red>**FeignClientFactoryBean** </font>注册到 Spring 容器。FeignClientFactoryBean 类实现了 FactoryBean\<T>，可以通过 `getObject()` 方法来获取并注入实例化对象。
 ![[../picture/Pasted image 20231209215925.png#pic_center|520]]
+
 ![[../picture/Pasted image 20231125224133.png#pic_center|570]]
+
 ```java
 private ResourceLoader resourceLoader;  // 资源加载器，可以加载 classpath 下的所有文件
 private Environment environment;   // 上下文，可通过该环境获取当前应用配置属性等
@@ -130,5 +134,43 @@ public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionR
 
 ![[../picture/Pasted image 20240604234320.png#pic_center|400]]
 
+---
+### 4.4 Redis 客户端
+&emsp;&emsp;在实际的业务场景中，Redis 客户端主要有以下 3 种，具体如下所示：
+&emsp;&emsp;&emsp; ①  **Jedis** ：作为一款 Redis 的 Java 实现客户端，其提供了比较全面的 Redis 命令的支持。其基于阻塞 I/O，且其方法调用为同步，程序流需要等到 Sockets 处理完 I/O 才能执行，不支持异步。Jedis 客户端实例不是线程安全的，所以需要通过连接池来使用 Jedis 。
+&emsp;&emsp;&emsp; ② **Lettuce** ：一款高级的 Redis 客户端，用于线程安全同步，异步和响应使用，支持集群，Sentinel，管道和编码器等。其基于 Netty 框架的事件驱动的通信层，其方法调用为异步。Lettuce 的 API 是线程安全的，所以可以操作单个 Lettuce 连接来完成各种操作。Lettuce 需要 Java 8 及以上版本运行平台，其能够支持 Redis Version 4 以实现与 Redis 服务端进行同步和异步的通信。
+&emsp;&emsp;&emsp; ② **Redisson** ：一款基于实现分布式和可扩展的 Java 数据结构，促使开发人员对 Redis 的关注分离，提供很多分布式相关操作服务，例如，分布式锁，分布式集合，可通过 Redis 支持延迟队列。其基于 Netty 框架的事件驱动的通信层，其方法调用是异步的。Redisson 的 API 是线程安全的，所以可以操作单个 Redisson 连接来完成各种操作。
 
 
+
+&emsp; &emsp; Jedis是一个Java语言的Redis客户端，用于在Java程序中连接和操作Redis服务器。Jedis提供了简单而强大的API，可以实现对Redis的各种操作。Jedis 为了适配Spring框架，通过 Spring-Data-Redis 对 Jedis 进行了高度封装。通过以下方式可以对Jedis 和 Spring-Data-Redis 进行引入。
+```xml
+<!--Jedis-->
+<dependency> 
+	<groupId>redis.clients</groupId>
+	<artifactId>jedis</artifactId> 
+	<version>3.0.1</version> <scope>compile</scope>
+</dependency>
+
+<!--Spring-Data-Redis-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+```
+![[../picture/Pasted image 20250216150030.png#pic_center|360]]
+
+#### 4.4.1 Jedis
+&emsp; &emsp; Jedis 是一款基于 BIO 实现的 Redis 的 Java 客户端。以微服务体系为例，其主要应用于 Spring Boot 1.x 中，在 Spring Boot 2.0 后，其默认已被 Lettuce 所取代。当然在 Spring Boot 2.x 中，Jedis 也可以继续使用。Jedis 包含以下几个核心类与服务端交互：Jedis、JedisCluster、ShardedJedis、JedisPool、JedisSentinelPool 以及 ShardedJedisPool。
+
+#### 4.4.2 RedisTemplate
+&emsp; &emsp; Jedis 为了适配Spring框架，通过 Spring-Data-Redis 对 Jedis 进行了高度封装。
+- **Spring-Data-Redis针对Jedis提供了如下功能：**
+	- ① **连接池自动管理，提供了一个高度封装的“RedisTemplate”类。**
+	- ② **针对 Jedis 客户端中大量 API 进行了归类封装，将同一类型操作封装为 Operation 接口**。 ValueOperations: 简单K-V操作、 SetOperations: Set类型数据操作、ZSetOperations: ZSet类型数据操作、HashOperations: 针对map类型的数据操作、ListOperations: 针对list类型的数据操作.
+	- ③ **提供了对 key 的“bound”(绑定)便捷化操作API，可以通过bound封装指定的key，然后进行一系列的操作而无须“显式”的再次指定Key**：BoundValueOperations、BoundSetOperations、BoundListOperations、BoundSetOperations、BoundHashOperations。
+	- ④ **将事务操作封装，由Bean容器控制**。
+	- ⑤ **针对数据的“序列化/反序列化”，提供了多种可选择策略 ( RedisSerializer )**。
+		- `JdkSerializationRedisSerializer`：POJO对象的存取场景，使用JDK本身序列化机制，将pojo类通过ObjectInputStream/ObjectOutputStream进行序列化操作，最终redis-server中将存储字节序列。是目前最常用的序列化策略。
+		- `StringRedisSerializer`：Key或者value为字符串的场景，根据指定的 charset 对数据的字节序列编码成 String，是`new String(bytes, charset)` 和 `string.getBytes(charset)` 的直接封装。是最轻量级和高效的策略。
+		- `JacksonJsonRedisSerializer`：Jackson-Json工具提供了Javabean与Json之间的转换能力，可以将POJO实例序列化成Json格式存储在redis中，也可以将Json格式的数据转换成POJO实例。
