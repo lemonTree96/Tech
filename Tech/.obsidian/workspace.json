@@ -4,100 +4,43 @@
     "type": "split",
     "children": [
       {
-        "id": "5c691f66d0f51f52",
+        "id": "de8b40f55697ac5a",
         "type": "tabs",
-        "dimension": 32.630979498861045,
+        "dimension": 30.964730290456433,
         "children": [
           {
-            "id": "9ca917ddfde1a087",
+            "id": "b348523ef14db376",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "数据存储结构/三、Redis.md",
+                "file": "Java/二、Java 语法基础.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "三、Redis"
-            }
-          },
-          {
-            "id": "66cb676e38f1bee8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Java/四、Spring 组件.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "四、Spring 组件"
-            }
-          },
-          {
-            "id": "47200b528f8dc5a0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "AI/一、人工智能.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "一、人工智能"
+              "title": "二、Java 语法基础"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       },
       {
-        "id": "6ae208ff7deffda2",
+        "id": "14338f0fa8b3f7fd",
         "type": "tabs",
-        "dimension": 67.36902050113895,
+        "dimension": 69.03526970954357,
         "children": [
           {
-            "id": "e3be215c498569b6",
+            "id": "c0ec958774fa12f1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Java/四、Spring 组件.md",
+                "file": "Java/二、Java 语法基础.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "四、Spring 组件"
-            }
-          },
-          {
-            "id": "ef90acfaa28a1f1b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "数据存储结构/三、Redis.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "三、Redis"
-            }
-          },
-          {
-            "id": "e7d92c2fee602c40",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "AI/一、人工智能.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "一、人工智能"
+              "title": "二、Java 语法基础"
             }
           }
         ]
@@ -119,7 +62,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabeticalReverse"
+                "sortOrder": "alphabeticalReverse",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "文件列表"
@@ -156,7 +100,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 338.5,
+    "width": 274.5,
     "collapsed": true
   },
   "right": {
@@ -219,10 +163,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "数据存储结构/三、Redis.md"
+                "file": "Java/二、Java 语法基础.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "三、Redis 的大纲"
+              "title": "二、Java 语法基础 的大纲"
             }
           }
         ],
@@ -230,11 +177,12 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
+    "width": 428.5,
     "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:创建新数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -244,34 +192,41 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "66cb676e38f1bee8",
+  "active": "b348523ef14db376",
   "lastOpenFiles": [
-    "picture/Pasted image 20250216150030.png",
-    "数据存储结构/三、Redis.md",
-    "Java/四、Spring 组件.md",
-    "AI/一、人工智能.md",
-    "picture/Pasted image 20250209223554.png",
-    "picture/Pasted image 20250209212605.png",
-    "picture/Pasted image 20250206231720.png",
-    "计算机网络/一、网络基础.md",
-    "AI",
-    "计算机网络/二、负载均衡.md",
-    "数据传输体系/二、MQ 异步通信.md",
-    "数据存储结构/二、MySQL.md",
-    "数据存储结构/一、数据结构与算法.md",
-    "picture/Pasted image 20250112180937.png",
-    "picture/Pasted image 20250111235733.png",
-    "picture/Pasted image 20250111220403.png",
-    "picture/Pasted image 20250111190424.png",
-    "picture/Pasted image 20250105170755.png",
-    "picture/Pasted image 20250104230240.png",
-    "picture/Pasted image 20250105155532.png",
-    "数据传输体系/一、RPC 远程过程调用.md",
-    "Java/三、Spring 基础.md",
-    "Java/一、Java 运行机制与JVM.md",
-    "Java/五、Java web.md",
-    "Go",
+    "picture/Pasted image 20260102174424.png",
+    "picture/Pasted image 20260102111934.png",
+    "picture/Pasted image 20260102110847.png",
+    "picture/Pasted image 20260102105047.png",
+    "picture/Pasted image 20251227220345.png",
+    "picture/Pasted image 20251227220219.png",
+    "picture/Pasted image 20251227212946.png",
+    "picture/Pasted image 20251213175611.png",
+    "picture/Pasted image 20251213175242.png",
     "Java/二、Java 语法基础.md",
+    "picture/Pasted image 20250927161504.png",
+    "picture/Pasted image 20251213175453.png",
+    "数据存储结构/二、MySQL.md",
+    "数据存储结构/三、Redis.md",
+    "Java/一、Java 运行机制与JVM.md",
+    "数据传输体系/二、MQ 异步通信.md",
+    "计算机网络/一、网络基础.md",
+    "Java/六、Java 基础组件.md",
+    "Blog/经典好文.md",
+    "AI/一、人工智能.md",
+    "Blog",
+    "Java/四、Spring 组件.md",
+    "计算机基础/二、编译原理.md",
+    "Java/三、Spring 基础.md",
+    "数据传输体系/一、RPC 远程过程调用.md",
+    "计算机网络/二、负载均衡.md",
+    "Java/五、Java web.md",
+    "数据存储结构/一、数据结构与算法.md",
+    "计算机基础",
+    "common-pool.md",
+    "l六、Java 基础组件.md",
+    "AI",
+    "Go",
     "计算机网络",
     "计算机系统",
     "11.md",
@@ -280,9 +235,7 @@
     "分布式架构",
     "picture",
     "pic",
-    "未命名文件夹",
     "image-20231008230652146.md",
-    "image-20231008230652146 2.png.md",
-    "Java"
+    "image-20231008230652146 2.png.md"
   ]
 }

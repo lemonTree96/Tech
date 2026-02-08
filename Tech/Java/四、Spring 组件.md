@@ -161,16 +161,166 @@ public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionR
 ![[../picture/Pasted image 20250216150030.png#pic_center|360]]
 
 #### 4.4.1 Jedis
-&emsp; &emsp; Jedis 是一款基于 BIO 实现的 Redis 的 Java 客户端。以微服务体系为例，其主要应用于 Spring Boot 1.x 中，在 Spring Boot 2.0 后，其默认已被 Lettuce 所取代。当然在 Spring Boot 2.x 中，Jedis 也可以继续使用。Jedis 包含以下几个核心类与服务端交互：Jedis、JedisCluster、ShardedJedis、JedisPool、JedisSentinelPool 以及 ShardedJedisPool。
+&emsp; &emsp; Jedis 是一款基于 BIO 实现的 Redis 的 Java 客户端。以微服务体系为例，其主要应用于 Spring Boot 1.x 中，在 Spring Boot 2.0 后，其默认已被 Lettuce 所取代。当然在 Spring Boot 2.x 中，Jedis 也可以继续使用。Jedis 作为 Redis 的客户端，对应 Redis 的四种工作模型：Redis Standalone (单节点模式)、Redis Cluster (集群模式) 、Redis Sentinel (哨兵模式) 以及 Redis Sharding (分片模式)。
 
+![[../picture/Pasted image 20250222221039.png#pic_center|660]]
+
+&emsp; &emsp;Jedis 实例通过 Socket 建立客户端与服务端的长连接，往 OutputStream 发送命令，从 InputStream 读取回复。其主要包括 3 种调用模式，具体如下：
+&emsp; &emsp; &emsp; ● **Client 模式**：客户端发一个命令，阻塞等待服务端执行，然后读取返回结果。在该模式下每次处理都有结果，一旦发现返回结果中有 Error，就可以立即处理。
+&emsp; &emsp; &emsp; ● **Pipeline 模式**：Pipeline 模式可以一次性发送多个命令，最后一次取回所有的返回结果。Pipeline 模式通过减少网络的往返时间和 IO 的读写次数，大幅度提高通信性能，但 Pipeline 不支持原子性，如果想保证原子性，可同时开启事务模式。
+&emsp; &emsp; &emsp; ● **Transaction 模式**：Transaction 模式即开启 Redis 的事务管理，Pipeline 可以在事务中，也可以不在事务中。事务模式开启后，所有的命令 (除了 EXEC、DISCARD、MULTI 和 WATCH ) 到达服务端以后，不会立即执行，会进入一个等待队列，等收到上述四个命令时执行不同操作。
+
+&emsp; &emsp;<font color=red>**Jedis 客户端是非线程安全的，Jedis 的请求流和响应流都是一个全局变量，如果同一个 Jedis 同时被多个线程使用的话，会出现数据错乱。**</font><font color=oragea>为了避免这个问题，同一个 Jedis 实例同一时刻只会被一个客户端线程使用即可。由于重复创建 Jedis 实例并建立连接是一个耗时操作，所以 Jedis 使用池化技术 - **JedisPool**。</font>
+
+&emsp; &emsp;Jedis 包含以下几个核心类与服务端交互：Jedis、JedisCluster、ShardedJedis、JedisPool、JedisSentinelPool 以及 ShardedJedisPool。Jedis 由以下几个核心模块组成：
+- ①  **Core: 核心模块，实现RESP协议**，包括：
+	 - Jedis/BinaryJedis 入口类，封装Redis的各种命令。
+	 -  Client/BinaryClient/Connection 与Redis进行具体的交互工作。
+	 -  Protocol, RedisInputStream, RedisOutputStream 实现RESP协议。
+ - ② **Sharding: 提供 Partitioning 支持**，为分片模式提供支持，包括：
+	 - ShardedJedis/BinaryShardedJedis: 首先对传入的Key进行Hash计算(默认使用高性能、低碰撞率的MurmurHash算法），然后根据计算结果找到相应的 Jedis 实例，最后执行命令。
+ - ③ **Pool: 提供连接池和 Sentinel 支持**，包括：
+	 -  JedisPool: 基于Apache Commons Pool实现的连接池，通过JedisFactory获取Jedis实例。
+	 -  JedisSentinelPool: 通过侦听"switch-master"事件，每当master切换时，调用 JedisFactory 重新初始化 master 连接信息。
+	 -  ShardedJedisPool: 与 JedisPool 类似，通过 ShardedJedisFactory 获取 ShardedJedis 实例。
+ - ④ **Pipeline: 提供 Pipelining 和 事务支持**，包括：
+	 - Pipeline: 通过 Jedis#pipelined() 获取实例。以类型安全的方式获取执行结果，通过 BuilderFactory 将 Object 类型的 Response 转化为期望的结果类型。
+		 -  非事务模式：构建 Response Queue，然后通过Client#getMany()批量获取结果。
+		- 事务模式：通过 MultiResponseBuilder 缓存 Response，然后批量获取结果。
+	-  Transaction: 通过 Jedis#multi() 获取实例。天然的事务属性，通过 Client#getMany() 批量获取结果，但无法获取单条命令的结果，且类型非安全。
+	-  ShardedJedisPipeline: 通过 ShardedJedis#pipelined() 获取实例。不同于 Pipeline 和 Transaction，由于请求可能落到多个Client 上，只能通过 Client#getOne() 挨个获取结果，类型非安全。
+- ⑤ **Cluster: 提供Cluster支持**，包括：
+	-  JedisCluster/BinaryJedisCluster: 通过 JedisClusterConnectionHandler 获取 Jedis 实例，然后执行命令。
+	- JedisClusterConnectionHandler & JedisClusterInfoCache: 通过 Collections#shuffle() 随机返回一个 Jedis 实例。使用ReentrantReadWriteLock 保证更新 Cluster 的 Jedis 实例列表时的线程安全性。
+	- JedisClusterCommand: 通过retry机制获取有效的Jedis实例，然后再执行命令。
+
+##### 1. Jedis Core
+&emsp; &emsp;  Jedis是连接Redis的关键角色，它继承了 BinaryJedis。BinaryJedis 中保存了单个 Client 的实例，而 Client 最终继承了 Connection。Connection 中则包含了单个 Socket 的实例，以及与之对应的两个读写流。因此，每个 Jedis 实例都对应一个 Socket 连接。  
+
+![[../picture/Pasted image 20250222223531.png#pic_center|760]]
+
+![[../picture/Pasted image 20250222230504.png#pic_center|850]]
+
+&emsp;&emsp;以 Jedis 执行 set命令为例，整个访问过程如下：
+&emsp; &emsp; &emsp; ① Jedis的 set 操作是通过 Client 的 set 操作来实现的。
+&emsp; &emsp; &emsp; ② Client 的 set操作是通过父类 Connection 的sendCommand(...) 来实现。
+&emsp; &emsp; &emsp; ③ 在 sendCommand(...) 中进行 socket 连接，并按照 Redis 的协议发送命令。
+```java
+// ---------------- 1.Jedis ------------------
+public class Jedis extends BinaryJedis implements JedisCommands, MultiKeyCommands,
+    AdvancedJedisCommands, ScriptingCommands, BasicCommands, ClusterCommands, SentinelCommands, ModuleCommands {
+  @Override
+  public String set(final String key, final String value) {
+    checkIsInMultiOrPipeline();
+    // client执行set操作
+    client.set(key, value);
+    return client.getStatusCodeReply();
+  }
+}
+ // ---------------- 2.Client ------------------
+public class Client extends BinaryClient implements Commands {
+  @Override
+  public void set(final String key, final String value) {
+    // 执行set命令
+    set(SafeEncoder.encode(key), SafeEncoder.encode(value));
+  }
+}
+// ---------------- 3.BinaryClient ------------------ 
+public class BinaryClient extends Connection {
+  public void set(final byte[] key, final byte[] value) {
+    // 发送set指令
+    sendCommand(SET, key, value);
+  }
+}
+// ---------------- 4.Connectionas ------------------ 
+public class Connection implements Closeable {
+  public void sendCommand(final ProtocolCommand cmd, final byte[]... args) {
+    try {
+      // socket连接redis
+      connect();
+      // 按照redis的协议发送命令
+      Protocol.sendCommand(outputStream, cmd, args);
+    } catch (JedisConnectionException ex) {
+    }
+  }
+}
+```
+##### 2. Jedis Pool
+&emsp; &emsp; Jedis Core 采用直连方式连接 Redis，每次都会新建TCP连接，在使用后在断开连接。对于频繁访问 Redis 的场景显然不是高效的使用方式，因此一般使用连接池的方式对 Jedis 连接池进行管理。Jedis 提供了 JedisPool 作为 Jedis 的连接池，同时使用了Apache的通用对象池工具  [[六、Java 基础组件#6.1 Apache Commons Pool2 - 池化组件|common-pool]] 作为资源的管理工具，Jedis 对象预先放在 JedisPool 池子中，每次要连接 Redis，只需要在池子中借出对象，用完对象后再归还给池子 JedisPool。需要注意的是，虽然 Jedis Pool 使用的是 Common-pool2，但并不是完全使用，而是通过 Pool\<T> 进行了一次包装。
+
+![[../picture/Pasted image 20250306224644.png#pic_center|500]]
+
+![[../picture/Pasted image 20250225233614.png#pic_center|680]]
+
+- ① 业务模块从资源池获取对象，会调用 ObjectPool#borrowObject()，最长会等待 maxWaitMillis 毫秒。如果资源池中没有空闲对象，则调用 PooledObjectFactory#makeObject() 创建对象，JedisFactory 是具体的实现类。
+- ② 创建完对象放到资源池中，返回空闲对象 idleObject()  给业务模块使用。
+- ③ 使用完对象会调用 ObjectPool#returnObject() ，其会校验一些条件是否满足。
+	- 如果条件验证通过，对象归还给资源池。
+	- 如果条件验证不通过，比如资源池已关闭、Jedis连接失效、已超出最大空闲资源数，则会调用 PooledObjectFactory#destoryObject() 从资源池中销毁对象。
+
+##### 3. Jedis Sharding
+&emsp; &emsp; ShardedJedis 主要是通过创建 ShardedJedisPool 对象来访问分片模式的多个Redis节点，主要用于在 Redis 没有集群功能的情况下实现数据的分布式存储，本质上是**客户端通过一致性哈希来实现数据分布式存储**。ShardedJedis 通过一致性哈希算法将不同的 key 分配到不同的 Redis服务器上，从而达到横向扩展。
+
+![[../picture/Pasted image 20250302142717.png#pic_center|520]]
+
+##### 4. Jedis Cluster
+&emsp; &emsp; 在单服务器(非集群) 的模式下，Jedis 通过 JedisPool 来解决 Jedis 多线程下线程不安全的问题，此时一个 JedisPool 中的所有对象都对应到一个 Redis 服务器主节点。但是在 Cluster 集群模式下，就会有多个主节点，每个主节点还占据了一部分的槽位。Jedis 客户端需要确认到底是要用哪个 \<ip:port> 的 Jedis 客户端，因此 JedisCluster 的客户端至少需要维护一个主节点和 JedisPool 的一个 Map：`Map<String,JedisPool> nodes`，key 值就是 Cluster 每个主实例的 \<ip:port>。但客户端实际请求时不知道 Key 会到哪个主实例 \<ip:port> 上去执行的，仅能知道 Key 对应的 HashSlot，因此还需要一个Map `Map<Integer,JedisPool> slots` 来维护 Hash 槽(1-16384) 与 JedisPool 的关系。
+
+![[../picture/Pasted image 20250306223251.png#pic_center|550]]
+&emsp; &emsp; &emsp; Jedis Cluster 的类框架如下图所示。在初始化时，虽然只传递了一个主节点的信息，但由于 Redis cluster 是去中心化的( 每个Redis节点包含整个集群的所有信息 )，Jedis Cluster 通过 `initializeSlotCache()` 和 Redis 集群进行交互，通过一个command，拿到所有的主节点相关信息，以及每个主节点包含的槽位信息，并构造 `Map<String,JedisPool> nodes` 和 `Map<Integer,JedisPool> slots` 。
+
+![[../picture/Pasted image 20250306225525.png]]
+
+><font color=SlateBlue> <u>**Q1. 为什么 Cluster 模式下，客户端无法支持 Pipline 指令？**</u></font>
+>&emsp; &emsp;&emsp;在 Redis Cluster 模式下，会有很多个 Redis 实例节点。而 Pipline 为了解决多次网络IO的问题，在 Pipline 的一系列指令中，必然包含了一系列的 key 值，这些 key 通过 `crc16(key)%16384` 计算的的槽位完全可能不在同一个节点上，所以在 Redis cluster 模式下不支持 `Pipline` 指令。
+>
+><font color=SlateBlue> <u>**Q2. 为什么 Cluster 模式，有时候又可以执行 mget，有时候不行？**</u></font>
+>&emsp; &emsp;&emsp; mget() 与 Pipline 相似，多个 key 对应的槽位可能不在同一个实例节点上的。但当 key 中包含了 { } 这个标识符，那么在计算crc16的时候，就只会拿{}里面的内容进行计算，那么只要你保持{} 中的字符串是一样的，那么这些 key 就一定会落在同一个实例节点上，则 mget() 指令就可以在 Cluster 模式执行了。
+>```java
+>private static final String TOPIC_1  = "{%s}:topic:1"
+>private static final String TOPIC_2  = "{%s}:topic:2"
+>private static final String TOPIC_3  = "{%s}:topic:3"
+>{%s}其实就是代表的一个唯一id (比如openid)，那么通过这种 hash_tag，就可以将一个用户的各类特征都存储在同一个 redis 实例中.
+>```
+>
 #### 4.4.2 RedisTemplate
-&emsp; &emsp; Jedis 为了适配Spring框架，通过 Spring-Data-Redis 对 Jedis 进行了高度封装。
-- **Spring-Data-Redis针对Jedis提供了如下功能：**
+&emsp; &emsp; 为了简化对数据的操作性，Spring-Data-Redis 提供了统一的操作模板 RedisTemplate，RedisTemplate 封装了 Jedis、Lettuce 的 API 操作 ( Redisson 目前是由 Redisson-Spring-Data 封装的 )，提供了Redis交互的高级抽象，虽然RedisConnection 提供请求和响应的二进制值 (byte数组) 的低级别方法，但 RedisTemplate 模板负责序列化和连接管理，使客户端无需处理这些细节。
+
+![[../picture/Pasted image 20250309213555.png#pic_center|500]]
+
+- **Spring-Data-Redis RedisTemplate 针对Jedis提供了如下功能：**
 	- ① **连接池自动管理，提供了一个高度封装的“RedisTemplate”类。**
-	- ② **针对 Jedis 客户端中大量 API 进行了归类封装，将同一类型操作封装为 Operation 接口**。 ValueOperations: 简单K-V操作、 SetOperations: Set类型数据操作、ZSetOperations: ZSet类型数据操作、HashOperations: 针对map类型的数据操作、ListOperations: 针对list类型的数据操作.
+	- ② **针对 Jedis 客户端中大量 API 进行了归类封装，将同一类型操作封装为 Operation 接口**。 
+		- ValueOperations: 简单K-V操作
+		- SetOperations: Set类型数据操作
+		- ZSetOperations: ZSet类型数据操作
+		- HashOperations: 针对map类型的数据操作
+		- ListOperations: 针对list类型的数据操作.
 	- ③ **提供了对 key 的“bound”(绑定)便捷化操作API，可以通过bound封装指定的key，然后进行一系列的操作而无须“显式”的再次指定Key**：BoundValueOperations、BoundSetOperations、BoundListOperations、BoundSetOperations、BoundHashOperations。
 	- ④ **将事务操作封装，由Bean容器控制**。
 	- ⑤ **针对数据的“序列化/反序列化”，提供了多种可选择策略 ( RedisSerializer )**。
 		- `JdkSerializationRedisSerializer`：POJO对象的存取场景，使用JDK本身序列化机制，将pojo类通过ObjectInputStream/ObjectOutputStream进行序列化操作，最终redis-server中将存储字节序列。是目前最常用的序列化策略。
 		- `StringRedisSerializer`：Key或者value为字符串的场景，根据指定的 charset 对数据的字节序列编码成 String，是`new String(bytes, charset)` 和 `string.getBytes(charset)` 的直接封装。是最轻量级和高效的策略。
 		- `JacksonJsonRedisSerializer`：Jackson-Json工具提供了Javabean与Json之间的转换能力，可以将POJO实例序列化成Json格式存储在redis中，也可以将Json格式的数据转换成POJO实例。
+
+##### 1. RedisTemplate 初始化与连接
+&emsp; &emsp; 当我们引入 RedisTemplate 时，在对应的包内会有 `RedisAutoConfiguration` 类， 用于 RedisTemplate 的自动化配置。在这个类中，会引入 LettuceConnectionConfiguration 和 JedisConnectionConfiguration 两个配置类，分别对应 Lettuce 和 Jedis 两个客户端的配置类。在 Spring 进行 IoC 容器 Bean 加载的时候，在 RedisTemplate 的 bean 声明中注入了一个 `JedisConnectionFactory` 实例。通过 JedisConnectionFactory 在 Spring 启动的时候 Redis 服务器。
+
+![[../picture/Pasted image 20250309222656.png#pic_center|580]]
+
+##### 2. RedisTemplete 序列化
+&emsp; &emsp; 从 Spring-Data-Redis 框架本身的角度看，存放到 Redis 的数据只是字节，虽然 Redis 本身支持各种类型，但大部分是指数据存储的方式，而不是它所代表的内容，由用户决定是否将字节转换为字符串或其他对象。用户自定义类型和原始数据之间的转换由 `org.springframework.data.redis.serializer` 包中的序列化器进行处理。
+
+![[../picture/Pasted image 20250309224439.png#pic_center|580]]
+
+- RedisTemplate 的序列化主要分为4类：**JDK 序列化方式、String 序列化方式、JSON 序列化方式、XML 序列化方式**。
+	- **JDK 序列化方式 - JdkSerializationRedisSerializer**：在 RedisTemplate 未设置序列化的情况下，JDK 序列化是默认的序列化方式。JDK 序列化在存储内容时，除了属性的内容外还存了其它内容在里面，总长度长，且不容易直观阅读。因此通常情况下不会使用 JDK 序列化方式。
+	- **String 序列化方式  - StringRedisSerializer**：用于字符串和二进制数组的**直接**转换。**大多数情况下，我们 KEY 和 VALUE 都会使用这种序列化方案**。而 VALUE 的序列化和反序列化，在业务逻辑中调用 JSON 方法去序列化。
+	- **JSON 序列化方式**：使用 Jackson 实现 JSON 的序列化方式，JSON 序列化有四种序列化器：
+		- ① **GenericJacksonJsonRedisSerializer**：通过使用传入对象的 `classPropertyTypeName` 属性对应的值，作为默认类型 (Default Typing) 进行序列化和反序列化为 Default Typing 对应的对象。
+		- ② **GenericJackson2JsonRedisSerializer \<T>**：使用 Jackson 实现 JSON 的序列化方式，并且显示指定 `<T>` 类型，不再需要传入默认类型 (Default Typing) 。
+		- ③ **GenericFastJsonRedisSerializer**：使用 FastJSON 实现 JSON 的序列化方式，和 GenericJacksonJsonRedisSerializer 一致。PS：GenericFastJsonRedisSerializer 不是 Spring-Data-Redis 内置实现，而是由于 FastJSON 自己实现。
+		- ④ **FastJsonRedisSerializer \<T>**：使用 FastJSON 实现 JSON 的序列化方式，和 GenericJackson2JsonRedisSerializer \<T> 一致。PS：FastJsonRedisSerializer \<T> 不是 Spring-Data-Redis 内置实现，而是由于 FastJSON 自己实现。
+	- **XML 序列化方式  - OxmSerializer**：使用 Spring OXM 实现将对象和 String 的转换，从而 String 和二进制数组的转换。
+
+

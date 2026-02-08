@@ -43,7 +43,7 @@
 
 /* 预览模式下的段落行间距和段间距 */
 .markdown-preview-view p {
-    line-height: 1.5; /* 行间距保持一致 */
+    line-height: 1.6; /* 行间距保持一致 */
     margin-top: 0.75em; /* 段首间距保持一致 */
     margin-bottom: 0.75em; /* 段尾间距保持一致 */
 }
@@ -86,7 +86,7 @@ body {
   --color-opacity: 1;
   
   /*mac标题栏背景颜色*/
-  --code-mac-style-header-bg: #222;
+  --code-mac-style-header-bg: #cec;
   
   /*代码块背景颜色*/
   --code-background: #eee;
@@ -106,16 +106,16 @@ body .markdown-rendered pre {
 body .markdown-rendered pre[class*=language-]::before {
   content: "未知语言";
   font-family: var(--font-text);
-  color: var(--inline-code);
+  color: black;
   font-weight: bold;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   position: absolute;
   letter-spacing: 0.05rem;
   text-align: right;
   right: calc(1.0rem + 2 * var(--size-4-1));
   top: 0.1333333333rem;
   line-height: var(--line-height-normal);
-  z-index: 9;
+  z-index: 8;
 }
 body .markdown-rendered pre[class~=language-c]::before {
   content: "C";

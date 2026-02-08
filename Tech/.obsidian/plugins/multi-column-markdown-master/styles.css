@@ -1,0 +1,33 @@
+.admonition-自定义的名字 .admonition-content {
+    width: 100%;
+    margin: 0px;
+
+    /*分栏*/
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+}
+
+.admonition-自定义的名字 .admonition-content div:nth-child(1){
+    margin: 0px 4px 0px 4px;
+    flex:1;
+}
+
+.admonition-自定义的名字 .admonition-content div:nth-child(2){
+    margin: 0px 4px 0px 4px;
+    flex:1;
+
+}
+
+.admonition-自定义的名字 .admonition-content div:nth-child(3){
+    margin: 0px 4px 0px 4px;
+    flex: 1;
+
+}
+
+.admonition-自定义的名字 .admonition-content div:nth-child(4){
+    margin: 0px 4px 0px 4px;
+    flex: 1;
+
+}

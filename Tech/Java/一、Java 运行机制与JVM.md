@@ -1,50 +1,123 @@
-&emsp; &emsp; Java是纯粹的面向对象的编程语言，它吸收了C++语言的特点，同时也摒弃了C++中难以理解的多继承，指针等概念。本Blog从C++为角度，主要学习总结C++与Java之间的区别，以及Java本身的基础特性。对于Java与C++的共有特性则略过。为了能够跨渠道，在不同的操作系统上运行Java程序，Java一共分为三个版本:Java SE ( 标准版 )、Java EE ( 企业版 )、 Java ME ( 微型版 )。
+&emsp; &emsp;Java是纯粹的面向对象的编程语言，它吸收了C++语言的特点，同时也摒弃了C++中难以理解的多继承，指针等概念。本Blog从C++为角度，主要学习总结C++与Java之间的区别，以及Java本身的基础特性。对于Java与C++的共有特性则略过。为了能够跨渠道，在不同的操作系统上运行Java程序，Java一共分为三个版本:Java SE ( 标准版 )、Java EE ( 企业版 )、 Java ME ( 微型版 )。
 ![[../picture/Pasted image 20231225190831.png#pic_center|400]]
-&emsp; &emsp;&emsp;  Java 介于编译型语言和解释型语言之间。编译型语言(C、C++)其代码是直接编译成机器码执行，但是不同的平台(x86、ARM等)CPU的指令集不同，因此，需要编译出每一种平台的对应机器码。解释型语言( Python、Ruby )由解释器直接加载源码然后编译运行，代价是运行效率太低。而 java 是将代码编译成一种<font color=red>“**字节码**”</font>，<font color=green>针对不同平台编写虚拟机 ( ***JVM*** )，不同平台的虚拟机负责加载字节码并执行，这样就实现了“一次编写，到处运行”。</font>
-![[../picture/Pasted image 20231225191054.png#pic_center|430]]
-&emsp; &emsp;&emsp; java中包括很多的开发工具，如 ***JDK*** ( *Java Development Kit* )，***JRE*** (  *Java Runtime Environment* )。其关系如下图所示：
-![[../picture/Pasted image 20231225191146.png#pic_center|630]]
-&emsp; &emsp;&emsp;  ● **JDK**：支持 *Java* 程序开发的最小环境，*JDK = JVM + Java API*
-&emsp; &emsp;&emsp;  ● **JRE** ：支持 Java 程序运行的标准环境，*JRE = JVM + Java SE API子集*
+&emsp; &emsp;&emsp;  Java 介于编译型语言和解释型语言之间。编译型语言(C、C++)其代码是直接编译成机器码执行，但是不同的平台(x86、ARM等)CPU的指令集不同，因此，需要编译出每一种平台的对应机器码。解释型语言( Python、Ruby )由解释器直接加载源码然后编译运行，代价是运行效率太低。而 Java 是将代码编译成一种<font color=red>“**字节码**”</font>，<font color=green>针对不同平台编写虚拟机 ( JVM )，不同平台的虚拟机负责加载字节码并执行，这样就实现了“一次编写，到处运行”。</font>
+![[../picture/Pasted image 20231225191054.png#pic_center|500]]
 
-### 1.1  JVM 底层原理
-&emsp; &emsp;  ***JVM*** 是 ***JRE*** 的一部分。它是一个虚构出来的虚拟机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。*JVM*有自己完善的硬件架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。Java语言最重要的特点就是跨平台运行。使用 *JVM* 就是为了支持与操作系统无关，实现跨平台。*JVM* 由三个子系统构成，具体框架如下：
+&emsp; &emsp;Java 虚拟机是Java平台的基石，负责其硬件和操作系统的独立性，为Java字节码的执行提供运行时环境。而 JVM 在 Java 虚拟机规范中没有规定具体实现，而是有各大厂商自己实现。
+&emsp; &emsp;&emsp;  ● **Classic VM**：“世界上第一款商用Java虚拟机”，在JDK 1.2 之前是Sun JDK中唯一的虚拟机，在JDK 1.2时，它与HotSpot VM并存。到JDK 1.4的时候，Classic VM完全退出商用虚拟机的历史舞台。
+&emsp; &emsp;&emsp;  ● <font color=red>**HotSpot VM**</font>：目前主流的JVM，广泛应用与Oracle JDK与O喷JDK，在JDK 1.3时，HotSpot VM成为默认虚拟机。
+
+&emsp; &emsp;Java 中包括很多的开发工具，如 **JDK** ( Java Development Kit )，**JRE** (  Java Runtime Environment )。其关系如下图所示：
+
+![[../picture/Pasted image 20231225191146.png#pic_center|680]]
+&emsp; &emsp;&emsp;  ● **JDK**：支持 *Java* 程序开发的最小环境，JDK = JVM + Java API
+&emsp; &emsp;&emsp;  ● **JRE** ：支持 Java 程序运行的标准环境，JRE = JVM + Java SE API子集
+
+### 1.1 Java 的执行过程
+&emsp; &emsp;Java的执行过程与代码的[[../计算机基础/二、编译原理|编译原理]]息息相关，整体可以分为两个部分：
+&emsp; &emsp;&emsp;**● Step 1 - 前端编译 (Front End)**：前端编译与源语言有关，与目标机无关。对 Java 来说，前端编译就是由 javac(编译器) 将源码编译成字节码，在这个过程中会进行词法分析、语法分析、语义分析。
+&emsp; &emsp;&emsp;**● Step 2 - 后端编译 (Back End)**：后端编译与目标机有关。解释器直接逐条将字节码解释执行，在解释执行的过程中，虚拟机同时对程序运行的信息进行收集，在这些信息的基础上，编译器会发挥作用，它会进行后端编译，把字节码编译成机器码，但不是所有的代码都会被编译，只有被JVM认定为的热点代码，才可能被编译。
+
+![[../picture/Pasted image 20250314222847.png#pic_center|600]]
+
+><font color=SlateBlue> <u>**Q1. 解释执行和编译执行的区别？**</u></font>
+>&emsp; &emsp; &emsp;● **解释执行**：解释执行是采用匹配执行解释器，解释器是个黑盒，在执行过程中将字节码逐条翻译成机器码。 由于逐条翻译，程序启动快，但是执行效率不高。
+>&emsp; &emsp; &emsp;● **编译执行**：运行期间，通过将字节码编译成对应的新的机器码，并将其缓存起来，然后执行。 由于需要将字节码编译出对应的机器指令，所以程序启动较慢，但是执行效率高 (因为执行的是机器指令)。
+
+&emsp; &emsp; 由于解释器是逐条将字节码解释为机器码来执行，所以在性能上 Java 通常不如 C++ 这类编译型语言。为了优化Java的性能 ，JVM在解释器之外引入了即时编译器 <font color=red>**JIT -  Just In Time**</font>：当程序运行时，解释器首先发挥作用，代码可以直接执行。随着运行时间推移，JIT 逐渐发挥作用，把越来越多的代码编译优化成本地机器码，来获取更高的执行效率。解释器这时仅作为编译运行的降级手段，在一些不可靠的编译优化出现问题时，再切换回解释执行，保证程序可以正常运行。JIT 极大地提高了 Java 程序的运行速度，而且跟静态编译相比，JIT 可以选择性地编译热点代码，省去了很多编译时间，也节省很多的空间。
+
+#### 1.1.1 JVM 后端编译器
+&emsp; &emsp;  HotSpot JVM内置了两个编译器，分别是 **Client Complier** 和 **Server Complier**。Client Compiler 注重启动速度和局部的优化，Server Compiler 则关注全局的优化，性能更好，但由于会进行全局分析，所以启动速度会变慢。
+
+##### 1. Client Complier - C1 编译器
+&emsp; &emsp;  Client Complier 被称为 C1 编译器，启动速度快。C1 通常会做这三件事：
+&emsp; &emsp; &emsp;● **局部简单可靠的优化**：比如字节码上进行的一些基础优化，方法内联、常量传播等，放弃许多耗时较长的全局优化。
+&emsp; &emsp; &emsp;● **将字节码编译成高级中间表示态 HIR** ( High-level Intermediate Representation )，HIR与平台无关，HIR 采用图结构，借助 HIR 我们可以实现冗余代码消除、死代码删除等编译优化工作。
+&emsp; &emsp; &emsp;● **将HIR转换成低级中间表示态 LIR** ( Low-level Intermediate Representation )，在LIR的基础上会进行寄存器分配、窥孔优化 (局部的优化方式，编译器在一个基本块或者多个基本块中，针对已经生成的代码，结合CPU自己指令的特点，通过一些认为可能带来性能提升的转换规则或者通过整体的分析，进行指令转换，来提升代码性能) 等操作，最终生成机器码。
+
+```java
+○ 局部简单可靠的优化，对方法进行内联
+public class Example {                      |    public class Example {
+    public int add(int a, int b) {          |        public void run() {
+        return a + b;                       |            int a = 5;
+    }                                       |            int b = 3;
+    public void run() {                     |            int result = a + b;  // 这里是内联后的 add 方法体
+        int result = add(5, 3);             |            System.out.println(result);                   
+        System.out.println(result);         |        }   
+    }                                       |    }
+}
+○ 通过 HIR 进行冗余代码消除
+public class OptimizationExample {          |      public class OptimizationExample {
+    public int calculate(int x, int y) {    |          public int calculate(int x, int y) {
+        int a = x + y;                      |              int a = x + y;
+        int b = x + y;  // 冗余计算          |              return a * a;  // 使用一个计算结果
+        return a * b;                       |          }
+    }                                       |      }
+}                                           |
+○ 通过 LIR 进行寄存器分配，由于寄存器的访问速度远快于内存，因此合理的寄存器分配可以显著提高程序的执行效率。
+int a = 5;              |     R1 = 5     // 将 5 赋值给寄存器 R1
+int b = 10;             |     R2 = 10    // 将 10 赋值给寄存器 R2
+int c = a + b;          |     R3 = R1 + R2 // 将 R1 和 R2 的和赋值给寄存器 R3
+System.out.println(c);  |
+```
+
+##### 2. Server Complier - C2 编译器
+&emsp;&emsp;C2编译器在进行编译优化时，会使用一种控制流与数据流结合的图数据结构，称为Ideal Graph。 Ideal Graph 表示当前程序的数据流向和指令间的依赖关系。Ideal Graph 的构建是在解析字节码的时候，根据字节码中的指令向一个空的 Graph 中添加节点，Graph中的节点通常对应一个指令块，每个指令块包含多条相关联的指令，JVM 会对这些指令进行优化，比如 Global Value Numbering、常量折叠等。解析结束后，还会进行死代码剔除的操作。生成 Ideal Graph 后，会在这个基础上结合收集的程序运行信息来进行一些全局的优化，这个阶段如果 JVM 判断此时没有全局优化的必要，就会跳过这部分优化。最后 Ideal Graph 都会被转化为一种更接近机器层面的 MachNode Graph，并在生成机器码前还会有一些包括寄存器分配、窥孔优化等操作。最后编译为机器码。
+
+![[../picture/Pasted image 20250315232922.png#pic_center|860]]
+
+##### 3. 分层编译
+&emsp;&emsp; 在Java 7以前，需要研发根据服务的性质去选择编译器。对于需要快速启动的，或者一些不会长期运行的服务，可以采用编译效率较高的C1；长期运行的服务，或者对峰值性能有要求的后台服务，可以采用峰值性能更好的C2。从 Java 7开始引入了分层编译的概念，它结合了 C1 和 C2 的优势，追求启动速度和峰值性能的平衡。分层编译将JVM的执行状态分为了五个层次，并且在 C1 编译器执行过程中收集能够反映程序执行状态的数据 (收集数据的称为 **profiling** )，其中最基本的统计数据就是方法的调用次数，以及循环回边的执行次数。五个层级分别是：
+&emsp;&emsp;&emsp; ① 只用解释器对字节码进行解释执行；
+&emsp;&emsp;&emsp; ② 执行不带 profiling 的C1 编译器代码；
+&emsp;&emsp;&emsp; ③ 执行仅带方法调用次数以及循环回边执行次数 profiling 的C1代码；
+&emsp;&emsp;&emsp; ④ 执行带所有profiling的 C1 编译器代码；
+&emsp;&emsp;&emsp; ⑤ 执行 C2 编译器代码。
+
+&emsp;&emsp; 通常情况下，C2代码的执行效率要比C1代码的高出30%以上。C1层按执行效率排序从高至低则是**1层>2层>3层**。这5个层次中，<font color=orage>1层和4层都是终止状态，当一个方法到达终止状态后，只要编译后的代码并没有失效，那么JVM就不会再次发出该方法的编译请求的</font>。服务实际运行时，JVM会根据服务运行情况，从解释执行开始，选择不同的编译路径，直到到达终止状态。下图中就列举了几种常见的编译路径：
+
+![[../picture/Pasted image 20250316225143.png#pic_center|920]]
+
+### 1.2  JVM 原理
+&emsp; &emsp;  JVM 是 JRE 的一部分。它是一个虚构出来的虚拟机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。JVM 有自己完善的硬件架构，如处理器、堆栈、寄存器等，还具有相应的指令系统。Java语言最重要的特点就是跨平台运行。使用 JVM 就是为了支持与操作系统无关，实现跨平台。JVM 由三个子系统构成，具体框架如下：
 &emsp; &emsp;&emsp;● **类加载系统** ：负责动态加载类，在运行时(而非编译时)，当一个类初次被引用的时候，它将被加载、链接、初始化。
 &emsp; &emsp;&emsp;● **执行时数据区域 ( 内存结构 )** ： 存放着类加载加载后的一些数据。
 &emsp; &emsp;&emsp;● **执行引擎** ：分配给运行时数据区的字节码将由执行引擎执行，执行引擎读取字节码并逐个执行。
-![[../picture/Pasted image 20231225191413.png#pic_center|630]]
+
+![[../picture/Pasted image 20231225191413.png#pic_center|780]]
 
 #### **1.1.1 类加载系统**
 ##### 1. 类的生命周期
-&emsp; &emsp; 类的生命周期是从虚拟机将`.class`文件加载到内存开始，直到卸载出内存为止。类的生命周期分为7个阶段，如下图所示：
-![[../picture/Pasted image 20231225191457.png#pic_center|600]]
+&emsp; &emsp; <font color=green>类的生命周期是从虚拟机将`.class`文件加载到内存开始，直到卸载出内存为止</font>。类的生命周期分为7个阶段，如下图所示：
+
+![[../picture/Pasted image 20231225191457.png#pic_center|650]]
+
 ###### (1).加载阶段(类加载器)
-&emsp; &emsp; JVM通过类的全限定名获取定义此类的二进制字节流 ( 这里并没有指定二进制字节流一定从 `.class` 文件中获取，也可以从其他地方获取，如从JAR获取，从网络中获取，动态代理从运行时计算生成)，并将字节流中的静态存储结构`(static)`转化为方法区的运行时数据结构，最终在内存中生成一个代表这个类的`java.lang.Class`对象，作为方法区该类的各种数据的访问入口。
-![[../picture/Pasted image 20231225191546.png#pic_center|600]]
+&emsp; &emsp; JVM 通过类的全限定名获取定义此类的二进制字节流 ( 这里并没有指定二进制字节流一定从 `.class` 文件中获取，也可以从其他地方获取，如从JAR获取，从网络中获取，动态代理从运行时计算生成)，并将字节流中的静态存储结构`(static)`转化为方法区的运行时数据结构，最终在内存中生成一个代表这个类的`java.lang.Class`对象，作为方法区该类的各种数据的访问入口。
+
+![[../picture/Pasted image 20231225191546.png#pic_center|680]]
 
 ###### (2).验证阶段
-&emsp; &emsp; 因为Java的 *Class* 文件并不一定要求必须从Java源码中编译得到，也可以从其他任何途径得到。如果JVM不检查输入的字节流，可能会载入错误的字节流导致系统崩溃。因此验证阶段的目的是确保 `.class`文件的字节流包含的信息符合虚拟机的要求，不会危害虚拟机自身的安全。验证阶段分为4个阶段：
-&emsp; &emsp;&emsp; **① 文件格式验证**：该阶段验证字节流是否符合 `.class`文件格式的规范，保证输入的字节流可以正确的解析，并存储于方法区中，格式上符合描述一个Java类型信息的保证。通过该阶段后，字节流会进入内存的方法区中进行储存，后面的验证阶段不会再直接操作字节流信息。
-&emsp; &emsp;&emsp;  **② 元数据验证( `.class` 语义分析)**：对字节码描述的信息进行语义分析 ( 数据类型校验、类校验 )，确保其描述的信息符合Java语言规范要求。(
-如这个类是否有父类、这个类的父类是否继承了不允许被继承的类，是否实现了接口的所有方法等 )。
+&emsp; &emsp; 因为 Java的 Class 文件并不一定要求必须从 Java 源码中编译得到，也可以从其他任何途径得到。如果 JVM 不检查输入的字节流，可能会载入错误的字节流导致系统崩溃。因此验证阶段的目的是确保 `.class`文件的字节流包含的信息符合虚拟机的要求，不会危害虚拟机自身的安全。验证阶段分为4个阶段：
+&emsp; &emsp;&emsp; **① 文件格式验证**：该阶段验证字节流是否符合 `.class`文件格式的规范，保证输入的字节流可以正确的解析，并存储于方法区中，格式上符合描述一个 Java 类型信息的保证。通过该阶段后，字节流会进入内存的方法区中进行储存，后面的验证阶段不会再直接操作字节流信息。
+&emsp; &emsp;&emsp;  **② 元数据验证( `.class` 语义分析)**：对字节码描述的信息进行语义分析 ( 数据类型校验、类校验 )，确保其描述的信息符合Java语言规范要求。( 如这个类是否有父类、这个类的父类是否继承了不允许被继承的类，是否实现了接口的所有方法等 )。
 &emsp; &emsp;&emsp; **③ 字节码验证**：通过数据流和控制流分析，确定程序语义是符合逻辑的。这个阶段对类的方法进行校验分析，保证类的方法在运行时不会做出危害虚拟机安全的事件。
 &emsp; &emsp;&emsp; **④ 符号引用验证**：符号引用校验发生在虚拟机将符号引用转化为直接引用的时候。符号引用校验对类自身以外的信息（常量池中的符号引用）的信息进行校检 (如符号引用中通过字符串描述的全限定名是否能够找到对应的类、符号引用中的类，字段，方法访问性是否可以被当前类访问 )，确保后续的解析动作能够正常执行。
 
 ###### (3).准备阶段(分配空间)
-
 &emsp; &emsp; 准备阶段为类变量 ( 仅为 `static` 修饰的变量，不包括实例变量 ) 分配内存空间并设置数据类型**零值**，这些类变量所使用的内存都将在方法区中进行分配。而实例变量会在对象实例化时随着对象一起分配在 Java 堆中。
 ```java
 假设一个类变量的定义为:  public static int value = 111;  
 变量value在『准备阶段』过后的初始值为0，在『初始化阶段』后才会将数值111赋值到value变量
 ```
 ![[../picture/Pasted image 20231225191804.png#pic_center|340]]
-###### (4).解析阶段
 
-&emsp; &emsp; 在解析阶段会<font color=green>**将常量池的一部分符号引用替换为直接引用的过程**。</font>调用目标的引用在编译时就确定下来了。解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄、和调用限定符7类符号引用。Java中在解析阶段可以将符号引用替换为直接引用的方法包括**类的静态方法**、**类的私有方法**、**父类方法**、**实例构造器**：
+###### (4).解析阶段
+&emsp; &emsp; 在解析阶段会<font color=green>**将常量池的一部分符号引用替换为直接引用的过程**。</font>调用目标的引用在编译时就确定下来了。解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄、和调用限定符7类符号引用。Java 中在解析阶段可以将符号引用替换为直接引用的方法包括**类的静态方法**、**类的私有方法**、**父类方法**、**实例构造器**：
 &emsp; &emsp;&emsp; ● 类的静态方法与类的类型关联，与对象无关，所以在解析阶段可以替换为直接引用；
 &emsp; &emsp;&emsp; ● 类的私有方法不能被外部其他类的对象访问，不会出现多态特性，因此在解析阶段可以替换为直接引用。
 &emsp; &emsp;&emsp; ● 父类的方法对于子类来说是“基准方法”，对于父类方法也不会出现多态特性，只有子类方法是多态的，因此在解析阶段可以替换为直接引用。
-![[../picture/Pasted image 20231225191909.png#pic_center|640]]
+![[../picture/Pasted image 20231225191909.png#pic_center|690]]
 ><font color=SlateBlue>  <u>**Q1. 什么是符号引用、直接引用 ？**</u></font>
 &emsp;&emsp;&emsp;● **符号引用**：是以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时无歧义定位到目标即可。符号引用与虚拟机的内存布局无关，引用的目标并不一定已经加载到内存中。<font color=green>在编译的时候每个Java类都会被编译成一个`.class`文件，但在编译的时候虚拟机并不知道所引用类的地址，就用符号引用来代替，而在解析阶段就是为了把这个符号引用转化成为真正的地址的阶段。</font>
 &emsp;&emsp;&emsp;● **直接引用**：是可以直接定位到目标的指针、相对偏移量或是一个能间接定位目标的句柄。直接引用是与虚拟机的内存布局相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用不会相同。如果有了直接引用，则引用的目标一定在内存中存在。
@@ -53,14 +126,20 @@
 &emsp;&emsp;&emsp;针对在解析阶段是否会将方法的符号引用替换为直接引用，会将方法分为**虚方法**和**非虚方法**。非虚方法在类加载机制中的解析阶段就可以直接将符号引用转化为直接引用，如静态方法、私有方法、*final* 方法、实例构造器、父类方法。除此之外的其他方法称为虚方法，虚方法是实现多态特性的主要方式。每个类中都有一个虚方法表，表中存放着各个方法的实际入口。虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成以后，JVM会把该类的方法表也初始化完毕。
 
 ###### (5).类初始化阶段
-&emsp;&emsp;在初始化阶段会执行类定义的Java代码，本质是执行类构造器`<clinit>()` 方法的过程。在初始化阶段分为两种初始化过程：<font color=orange>类的**主动引用**、**被动引用**</font>：
-&emsp; &emsp;&emsp;<font color=green>**● 主动引用**：**是指在初始化阶段，一定会对类进行初始化**。</font>有4种场景会发生类的主动引用：
+&emsp;&emsp;在初始化阶段会执行类定义的 Java 代码，本质是执行类构造器 `<clinit>()` 方法的过程。在初始化阶段分为两种初始化过程：<font color=orange>类的**主动引用**、**被动引用**</font>。
+
+**▨ 主动引用**：
+
+&emsp;&emsp;<font color=green>主动引用是指在初始化阶段，一定会对类进行初始化。</font>有4种场景会发生类的主动引用：
 &emsp; &emsp; &emsp; ① 使用new关键字实例化对象的时候；读取或设置一个类的静态字段【`getstatic`、`putstatic`、`invokestatic`操作静态字段的指令】(被`final`修饰、已经在编译期把结果放入常量池的静态字段除外)，以及调用一个类的静态方法的时候。
 &emsp; &emsp; &emsp; ② 使用`java.lang.reflect`包的方法对类进行反射调用的时候。
 &emsp; &emsp; &emsp; ③ 当初始化一个类的时候，如果发现其父类还没进行初始化，则必须对父类进行初始化。
 &emsp; &emsp; &emsp; ④ 当虚拟机启动时，用户指定的要执行的主类（包含main方法的类），虚拟机会先初始化这个主类。
-&emsp; &emsp; &emsp; ⑤ 如果一个 ***java.lang.invoke.MethodHandle*** 实例最后的解析结果是 ***REF_gegtStatic***、***REF_putStatic***、***REF_invokeStatic*** 的方法句柄，且这个方法句柄对应的类没用进行过初始化，则需要先触发其初始化操作。
-&emsp; &emsp;&emsp;<font color=green>**● 被动引用**：**除了主动引用，其余引用类的方式都不会触发初始化，因此称为被动引用**。</font>
+&emsp; &emsp; &emsp; ⑤ 如果一个 **java.lang.invoke.MethodHandle** 实例最后的解析结果是 **REF_gegtStatic**、**REF_putStatic**、**REF_invokeStatic** 的方法句柄，且这个方法句柄对应的类没用进行过初始化，则需要先触发其初始化操作。
+
+**▨ 被动引用**：
+
+&emsp;&emsp; <font color=green>除了主动引用，其余引用类的方式都不会触发初始化，因此称为被动引用。</font>
 &emsp; &emsp; &emsp; ① 对于静态字段，只有直接定义这个字段的类才会被初始化，<font color=green>**通过其子类来引用父类中定义的静态字段，只会触发其父类的初始化而不会触发子类的初始化**。</font>
 ```java
 package test;
@@ -81,7 +160,7 @@ public class test {
     }
 }
 ```
-&emsp;&emsp;&emsp; ② <font color=green>**通过数组定义来引用类，不会触发此类的初始化**。</font>
+&emsp; &emsp; ② <font color=green>**通过数组定义来引用类，不会触发此类的初始化**。</font>
 ```java
 package test;
 class Superclass{
@@ -96,7 +175,7 @@ public class test {
     }
 }
 ```
-&emsp;&emsp;&emsp; ③ <font color=green>**常量在编译阶段会存入调用类的常量池中，并没有直接引用到定义常量的类，因此不会触发定义常量的类的初始化**。</font>
+&emsp; &emsp; ③ <font color=green>**常量在编译阶段会存入调用类的常量池中，并没有直接引用到定义常量的类，因此不会触发定义常量的类的初始化**。</font>
 ```java
 package test;
 class Superclass{
@@ -111,13 +190,15 @@ public class test {
     }
 }
 ```
-><font color=SlateBlue>  <u>**Q1.  *static*，*final*，*static final* 对修饰字段赋值时的区别 ？**</u></font>
-&emsp;&emsp;&emsp; ● `static` 在准备阶段时被初始化为0或null，在初始化阶段时被赋予代码中设定的值，如果没有设定值，则仍为默认值。
-&emsp;&emsp;&emsp; ● `static final` 在通过Javac编译时生成常量值`Constantvalue`属性，在准备阶段时根据设定值为该字段进行赋值。该字段没有默认值，必须显式的赋值。
+
+><font color=SlateBlue>  <u>**Q1.  static，final，static final 对修饰字段赋值时的区别 ？**</u></font>
+&emsp;&emsp;&emsp; ● `static` 在准备阶段时被初始化为 0 或 null，在初始化阶段时被赋予代码中设定的值，如果没有设定值，则仍为默认值。
+&emsp;&emsp;&emsp; ● `static final` 在通过 Javac 编译时生成常量值 `Constantvalue` 属性，在准备阶段时根据设定值为该字段进行赋值。该字段没有默认值，必须显式的赋值。
 &emsp;&emsp;&emsp; ● `final` 在运行时被初始化，一旦初始化便不可更改。
 >
-<font color=SlateBlue>  <u>**Q2. 什么是`<clinit>()`方法 ？**</u></font>
-&emsp;&emsp;&emsp; ● `<clinit>()`方法是有编译器自动收集类中的所有类变量的赋值动作和静态语句块 `static{}` 中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序决定的，因此静态语句块只能访问到定义在静态语句块之前的变量，定义在之后的变量，在静态语句块中可以赋值，但不能访问。
+><font color=SlateBlue>  <u>**Q2. 什么是  clinit() 方法 ？**</u></font>
+&emsp;&emsp;&emsp; ● \<clinit\>() 方法是有编译器自动收集类中的所有类变量的赋值动作和静态语句块 `static{}` 中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序决定的，因此，静态语句块只能访问到定义在静态语句块之前的变量，定义在之后的变量，在静态语句块中可以赋值，但不能访问。
+>
 >```java
 >public class test{
 >	static{
@@ -125,11 +206,11 @@ public class test {
 >		System.out.println(i);  //编译器会提示 "非法向前引用"
 >	}
 >	static int i = 1;
-}
+>}
 >```
-&emsp;&emsp;● `<clinit>()`方法不需要显式的调用父类构造器，虚拟机会在子类的`<clinit>()`方法执行之前，执行完成父类的`<clinit>()`方法，意味着父类中定义的静态语句块要优先于子类的变量赋值操作。由于 ***java.lang.Object*** 是所有子类的父类，因此虚拟机中第一个被执行的`<clinit>()` 方法的类一定是 ***java.lang.Object***。
-&emsp; &emsp;&emsp;● 接口中不能使用静态语句块，但仍然会有变量的初始化操作，因此接口与类一样都会生成`<clinit>()` 方法。但执行接口的`<clinit>()`方法不需要先执行父接口的`<clinit>()`方法，只有当父接口中定义的变量被使用时，父接口才会初始化。另外，接口的实现类在初始化时也不会执行接口的`<clinit>()`方法。
-&emsp; &emsp;&emsp;● 虚拟机会保证一个类的`<clinit>()`方法在多线程环境中正确的加锁，同步。多个线程同时初始化一个类时，只有一个线程可以执行这个类的`<clinit>()`方法，其他线程进入阻塞状态，直到`<clinit>()`方法执行完成。
+>&emsp;&emsp;● \<clinit\>() 方法不需要显式的调用父类构造器，虚拟机会在子类的 \<clinit\>() 方法执行之前，执行完成父类的 \<clinit\>() 方法，意味着父类中定义的静态语句块要优先于子类的变量赋值操作。由于 **java.lang.Object** 是所有子类的父类，因此虚拟机中第一个被执行的 \<clinit\>() 方法的类一定是 **java.lang.Object**。
+>&emsp; &emsp;&emsp;● 接口中不能使用静态语句块，但仍然会有变量的初始化操作，因此接口与类一样都会生成 \<clinit\>() 方法。但执行接口的 \<clinit\>() 方法不需要先执行父接口的 \<clinit\>() 方法，只有当父接口中定义的变量被使用时，父接口才会初始化。另外，接口的实现类在初始化时也不会执行接口的\<clinit\>() 方法。
+>&emsp; &emsp;&emsp;● 虚拟机会保证一个类的 \<clinit\>() 方法在多线程环境中正确的加锁，同步。多个线程同时初始化一个类时，只有一个线程可以执行这个类的  \<clinit\>() 方法，其他线程进入阻塞状态，直到 \<clinit\>() 方法执行完成。
 >```java
 >static class LoopClass{
 >	 static{
@@ -138,7 +219,7 @@ public class test {
 >			while(true){}
 >		}
 >	}
-}
+>}
 public static void main(String[] args) {
 >	Runnable runnable = new Runnable() {
 >	@Override
@@ -147,51 +228,66 @@ public static void main(String[] args) {
 > 		LoopClass loopClass = new LoopClass();
 >		System.out.println(Thread.currentThread().getName() + " over");
 >	}
-};
+>};
 >
 >Thread thread1 = new Thread(runnable);
-Thread thread2 = new Thread(runnable);
-thread1.start();
-thread2.start();
+>Thread thread2 = new Thread(runnable);
+>thread1.start();
+>thread2.start();
 >
--- Output --
-Thread[Thread-0,5,main] start
-Thread[Thread-1,5,main] start
-Thread[Thread-0,5,main] init  由于线程0初始化时进入循环，导致线程1初始化对象被阻塞
+>-- Output --
+>Thread[Thread-0,5,main] start
+>Thread[Thread-1,5,main] start
+>Thread[Thread-0,5,main] init  由于线程0初始化时进入循环，导致线程1初始化对象被阻塞
 >```
 
-##### 2. 类加载器 *ClassLoader*
-&emsp; &emsp; 在类生命周期的加载阶段，是由<font color=orange>**类加载器**</font>来完成的。<font color=red>**类加载器的作用根据一个类的全限定名读取类的二进制字节流到 JVM( 运行时数据区的方法区 ) 中，然后生成在堆区创建一个对应的`java.lang.Class对象实例`用来封装方法区中的数据**。</font>在一个程序当中，一个类可以从"任意一个地方被加载"，如：
+##### 2. 类加载器 ClassLoader - 类加载到内存
+&emsp; &emsp; 类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在创建一个java.lang.Class 对象，用来封装类在方法区内的数据结构。在类生命周期的加载阶段，是由<font color=orange>**类加载器**</font>来完成的。<font color=orage>类加载器会根据一个类的<font color=red>**全限定名**</font>读取类的二进制字节流到 JVM (运行时数据区的方法区)  中，然后生成在堆区创建一个对应的 java.lang.Class 对象实例用来封装方法区中的数据。</font>在一个程序当中，一个类可以从"任意一个地方被加载"，如：
 &emsp; &emsp;&emsp; ● 从本地系统直接加载，如JRE、CLASSPATH。
 &emsp; &emsp;&emsp; ● 通过网络中下载 `.class` 文件
 &emsp; &emsp;&emsp; ● 从zip，jar等归档文件中加载 `.class` 文件
 &emsp; &emsp;&emsp; ● 从专有数据库中提取 `.class` 文件
 &emsp; &emsp;&emsp; ● 将Java源文件动态编译为 `.class` 文件
 
-&emsp; &emsp; 对于任意一个类，都需要由加载它的类加载器和这个类本身一同确立其在Java虚拟机中的唯一性。每一个类加载器，都拥有一个独立的类名称，<font color=orange> **对于任意两个类，只有这两个类是由同一个类加载器加载时，这两个类才相等**</font>，否则即使这两个类来源于同一个Class文件，被同一个虚拟机加载，只要加载的类加载器不同，那这个两个类一定不相等。除此之外，<font color=orange>类加载器具有全盘负责机制，即当一个类加载器加载一个类时，这个类所依赖的、引用的其他所有类都由这个类加载器加载，除非在程序中显式的指定另一个类加载器加载。</font>><font color=green>JVM 中包含四种类型的类加载器，每个类加载器代表不同的**信任级别**，最可信的级别是 Java 核心API类，**每个类加载器都只能加载自己所绑定目录下的资源**</font>。从 JVM 的角度看，扩展类加载器 ( *Extension* )和应用程序类加载器 ( *Application* ) 相比启动类加载器 ( *Bootstrap* ) 属于其他类加载器，由Java语言实现，独立存在于虚拟机外部，并且全部继承抽象类 `java.lang.ClassLoader`。
-&emsp; &emsp;&emsp; ● ( ***Bootstrap*** ) 启动类/引导类加载器：*Bootstrap* 类加载器是由C++代码实现，是虚拟机的一部分，它负责将 `JAVA_HOME/lib`下面的核心类库或 `-Xbootclasspath` 选项指定的 jar 包加载到虚拟机内存中。*Bootstrap* 类加载器由 JVM 本地实现，因此开发者无法直接获取到 *Bootstrap* 类加载器的引用。
-&emsp; &emsp;&emsp; ● ( ***Extension*** ) 扩展类加载器 ：*Extension* 类加载器由 *ExtClassLoader* `(sun.misc.Launcher$ExtClassLoader)`实现，负责将 `JAVA_HOME/lib/ext` 或者由系统变量 `-Djava.ext.dir` 指定位置中的类库加载到内存中，开发者可以直接使用标准扩展类加载器。
-&emsp; &emsp;&emsp; ● ( ***Application/System*** ) 应用程序类/系统类加载器：*Application* 类加载器由 *AppClassLoader* `(sun.misc.Launcher$AppClassLoader)`实现，负责加载用户类路径上所指定的类库，如果程序中没有自定义类加载器，则该加载器是程序中默认的类加载器。 
-&emsp; &emsp;&emsp; ● ( ***User*** ) 自定义类加载器：***User*** 类加载器是根据自身需要自定义的 `ClassLoader`。
+&emsp;&emsp;对于任意一个类，都需要由加载它的**类加载器和这个类本身**一同确立其在 Java 虚拟机中的唯一性。每一个类加载器，都拥有一个独立的类名称，<font color=red> 对于任意两个类，只有这两个类是由同一个类加载器加载时，这两个类才相等</font>，否则即使这两个类来源于同一个 Class 文件，被同一个虚拟机加载，只要加载的类加载器不同，那这个两个类一定不相等。
+
+###### (1).类加载器分类
+&emsp;&emsp; JVM 支持两种类型的加载器，分别是**引导类加载器**和 **自定义加载器** 。其中，引导类加载器是由c/c++实现的，自定义加载器是由 Java 实现的，独立存在于虚拟机外部。 根据JVM 规范定义，自定义加载器是指派生于抽象类 `java.lang.ClassLoader` 的类加载器。按照这样的加载器的类型划分，最常见的类加载器是：引导类加载器BootStrapClassLoader、自定义类加载器 ( Extension Class Loader、System Class Loader、User-Defined ClassLoader )。
+![[../picture/Pasted image 20250413172237.png#pic_center|440]]
+
+&emsp; &emsp; ● **Bootstrap 启动类/引导类加载器** ：Bootstrap 类加载器是由C++代码实现，是虚拟机的一部分，它负责将 `JAVA_HOME/lib`下面的核心类库或 `-Xbootclasspath` 选项指定的 jar 包加载到虚拟机内存中。Bootstrap 类加载器由 JVM 本地实现，因此开发者无法直接获取到 Bootstrap 类加载器的引用。Bootstrap 类加载器并不继承自java.lang.ClassLoader，没有父加载器。
+
+&emsp; &emsp; ● **Extension 扩展类加载器** ：Extension 类加载器是Java 语言编写的，由 ExtClassLoader `(sun.misc.Launcher$ExtClassLoader)`实现。Extension 类加载器负责将 `JAVA_HOME/lib/ext` 或者由系统变量 `-Djava.ext.dir` 指定位置中的类库加载到内存中，开发者可以直接使用标准扩展类加载器。如果用户创建的 JAR 放在 `JAVA_HOME/lib/ext` 目录下，会自动由扩展类加载器加载。Extension 扩展类加载器派生于 `java.lang.ClassLoader`类 。
+
+&emsp; &emsp; ● **Application/System 应用程序类/系统类加载器**：Application 类加载器由 AppClassLoader `(sun.misc.Launcher$AppClassLoader)`实现，负责加载环境变量 classpath 或系统属性 `java.class.path` 指定路径下的类库。一般来说，Java应用的类都是由它来完成加载的。可以通过 `ClassLoader#getSystemClassLoader()` 方法获取到该类加载器。
+
+&emsp; &emsp; ● **User 自定义类加载器**：在日常开发中，类加载几乎是由三种加载器配合执行的。在必要时我们还可以自定义类加载器，来定制类的加载方式。User 类加载器是根据自身需要自定义的 `ClassLoader`。s
+
 ><font color=SlateBlue>  <u>**Q1. 如果所有的类都使用一个类加载器来加载，会出现什么问题呢 ？**</u></font>
-&emsp; &emsp;&emsp; ● 健壮性和功能性：JVM可以从不同的地方去加载class，比如文件系统，web，FTP等，这就要求JVM屏蔽底层的加载逻辑，只需要提供一个*classloard()* 的接口就行了，客户端就可以加载类但是却不用管类加载器到底是怎么实现的。
-&emsp; &emsp;&emsp; ● 安全性：JVM得保证自有类不遭到破坏。假如我们自己编写一个类`java.util.Object`，它的实现有一定的危险性或者隐藏的bug。而Java自带的核心类里面也有`java.util.Object`，如果JVM启动的时候先行加载的是我们自己编写的`java.util.Object`，那么就有可能出现安全问题。
+&emsp;&emsp;&emsp;● **健壮性和功能性**：JVM可以从不同的地方去加载class，比如文件系统，web，FTP等，这就要求JVM屏蔽底层的加载逻辑，只需要提供一个 `classloader()` 的接口就行了，客户端就可以加载类但是却不用管类加载器到底是怎么实现的。
+&emsp;&emsp;&emsp;● **安全性**：JVM得保证自有类不遭到破坏。假如我们自己编写一个类 `java.util.Object`，它的实现有一定的危险性或者隐藏的bug。而Java自带的核心类里面也有 `java.util.Object`，如果JVM启动的时候先行加载的是我们自己编写的 `java.util.Object`，那么就有可能出现安全问题。
 >
 <font color=SlateBlue>  <u>**Q2. 类加载的时机 ？**</u></font>
-&emsp; &emsp;&emsp; ● 创建类的实例时，如 *new* 一个对象;
-&emsp; &emsp;&emsp; ● 访问某个类或接口的静态变量，或者对该静态变量赋值时会触发类加载。但如果静态变量是 ***final*** 类型，且在编译时可以确定变量值，则Java编译器会在编译时将变量出现的地方替换成它的值，程序使用该静态变量时，也不会导致该类的初始化，就不会触发类加载。反之如果在编译时不能确定变量值，如果通过该类来访问它的静态变量，则会导致该类被初始化。
+&emsp; &emsp;&emsp; JVM并不是在一开始就把一个程序就所有的类都加载到内存中，而是在程序第一次主动使用类的时候，才会去加载该类的时候才把它加载进来，而且只加载一次。只有在触发类加载的时候才会进行类的加载。
+&emsp; &emsp;&emsp; ● 创建类的实例时，如 `new()` 一个对象;
+&emsp; &emsp;&emsp; ● 访问某个类或接口的静态变量，或者对该静态变量赋值时会触发类加载。但如果静态变量是 final 类型，且在编译时可以确定变量值，则Java编译器会在编译时将变量出现的地方替换成它的值，程序使用该静态变量时，也不会导致该类的初始化，就不会触发类加载。反之如果在编译时不能确定变量值，如果通过该类来访问它的静态变量，则会导致该类被初始化。
 &emsp; &emsp;&emsp; ● 调用类的静态方法;
 &emsp; &emsp;&emsp; ● 反射获取某个类时，如 `Class.forName("com.demo.load")`
 &emsp; &emsp;&emsp; ● 初始化一个类的子类，会首先初始化子类的父类，会触发父类的加载;
 &emsp; &emsp;&emsp; ● JVM启动时标明的启动类，即文件名和类名相同的那个类;
 
 ##### 3. 类的加载机制
-###### (1). 双亲委派模型
-&emsp; &emsp; 双亲委派模型是对各种加载器制定的加载的规范，越基础的类由越上层的加载器进行加载，解决了各个类加载器的基础类统一问题，JVM 在加载类时默认采用<font color=red>**双亲委派模型**</font>，双亲委派模型要求除了顶层的启动类加载器外，其他的类加载器都要有自己的"父类加载器"。双亲委派模型的类加载流程如下：
+###### (1).全盘负责机制
+&emsp;&emsp; 类加载器具有全盘负责机制，即当一个类加载器加载一个类时，这个类所依赖的、引用的其他所有类都由这个类加载器加载，除非在程序中显式的指定另一个类加载器加载。
+###### (2).缓存机制
+&emsp;&emsp; 缓存机制会保证所有加载过的Class都会被缓存，当程序中需要使用某个类时，类加载器先从缓冲区中搜寻该类，若搜寻不到将读取该类的二进制数据，并转换成Class对象存入缓冲区中。这就是为什么修改了 Class 后需重启 JVM 才能生效的原因。
+###### (3).双亲委派模型
+&emsp;&emsp;双亲委派模型是对各种加载器制定的加载的规范，越基础的类由越上层的加载器进行加载，解决了各个类加载器的基础类统一问题，JVM 在加载类时默认采用<font color=red>**双亲委派模型**</font>，双亲委派模型要求除了顶层的启动类加载器外，其他的类加载器都要有自己的"父类加载器"。双亲委派模型的类加载流程如下：
 &emsp; &emsp;&emsp; ● **向上委派**：如果一个类加载器收到类加载请求，首先不会自己去加载这个类，而是将加载请求委派给父类加载器，若父类加载器缓存中存在该类，则返回。若没有则继续向上委派，直到启动类加载器。因此所有的加载请求最终都应该传送到启动类加载器中。
 &emsp; &emsp;&emsp; ● **向下查找**：当启动类加载器也不存在该类时，会从上到下依次查找类加载路径是否存在该类，若存在则加载该类，并返回。若不存在，则继续向下查找，直到发起加载请求的类加载器为止。
-![[../picture/Pasted image 20231225210522.png#pic_center|620]]
-&emsp; &emsp;&emsp; JVM 并不是在启动时就把所有的`.class`文件都加载一遍，而是程序在运行过程中用到了这个类才去加载。除了启动类加载器外，其他所有类加载器都需要继承抽象类`ClassLoader`。
+
+![[../picture/Pasted image 20231225210522.png#pic_center|690]]
+
 ```java
 public abstract class ClassLoader {
     private final ClassLoader parent; //每个类加载器都有个父加载器
@@ -513,7 +609,7 @@ public class FinalTest{
 &emsp; &emsp;&emsp;  **⑧ 传递性：**如果操作A先发生于操作B，操作B先发生于操作C，则操作A先发生于操作C。
 
 #### 1.1.4 Java 对象创建
-##### <font color=Sienna>**1. *Java* 对象的创建过程**</font>
+##### <font color=Sienna>**1. Java 对象的创建过程**</font>
 &emsp; &emsp; 当虚拟机收到 *new* 指令时，首先检查这个指令对应的参数能否在运行时常量池中定位到一个类的符号引用，如果存在符号引用，则检查符号引用代表的类是否被加载、解析、初始化。如果没有被加载，则执行类加载过程，如果已经加载，则虚拟机为新对象从 *java* 堆中分配内存，并将分配的内存空间初始化为0。内存分配完成后，虚拟机将对象的基本信息存放在对象头 ( *Object Header* ) 中。 最后调用 *\<init\>* 方法根据构造函数对对象进行初始化。
 ![[../picture/Pasted image 20231225215356.png#pic_center|850]]
 ><font color=SlateBlue>  <u>**Q1. 对象被频繁创建时，是如何解决内存并发创建问题的 ？**</u></font>
@@ -521,17 +617,19 @@ public class FinalTest{
 &emsp;&emsp;&emsp;<font color=red> ① 对分配内存空间的动作进行同步处理，采用**CAS + 失败重试方式**保证更新操作的原子性。</font>
 &emsp;&emsp;&emsp;<font color=red> ② 把内存分配的分配按照线程划分在不同的空间中进行，即**每个线程在 java 堆中预先分配一小块内存，称为本地线程分配缓冲 ( *TLAB* )。当  *TLAB* 用完并分配新的 *TLAB* 时，才进行同步锁定**。 </font>
 
-##### <font color=Sienna>**2. *Java* 对象的内存布局**</font>
-&emsp; &emsp; 在虚拟机中，对象在内存的布局分为三个区域：**对象头( *Header* )，实例数据( *Instance Data* ) 和 对齐填充 ( *Padding* )**，其结构与内容如下图所示:
+##### <font color=Sienna>**2. Java 对象的内存布局**</font>
+&emsp; &emsp; 在虚拟机中，对象在内存的布局分为三个区域：**对象头( Header )，实例数据( Instance Data ) 和 对齐填充 ( Padding )**，其结构与内容如下图所示:
 ![[../picture/Pasted image 20231225215631.png#pic_center|550]]
 
-###### (1). 对象头 *Object Header*
+###### (1). 对象头 Object Header
 &emsp;&emsp;JVM 的对象头信息分为两部分：
-&emsp; &emsp;&emsp; ● ***Mark Word*** : 用于存储对象自身的运行时数据 (在32位/64位 JVM中分别对应 32/64 *bit* )。对象头信息相对与对象自身定义的数据信息是毫无关联的，其所占用的内存空间对于对象来说属于额外存储成本。为了提高 JVM 的内存空间利用率，*Mark Word* 被设计成一个非固定的数据结构以便在更小的空间中存储更多信息。
-![[../picture/Pasted image 20231225215727.png]]
-&emsp; &emsp; ● ***Klass Pointer :***用于存储指向方法区对象类型数据 (类元数据) 的指针。虚拟机通过这个指针来确定这个对象是哪个类的实例。
+&emsp;&emsp;&emsp;● **Mark Word** : 用于存储对象自身的运行时数据 (在32位/64位 JVM中分别对应 32/64 bit )。对象头信息相对与对象自身定义的数据信息是毫无关联的，其所占用的内存空间对于对象来说属于额外存储成本。为了提高 JVM 的内存空间利用率，Mark Word 被设计成一个非固定的数据结构以便在更小的空间中存储更多信息。<font color=green>在 Mark Word 中，所有对象的对象头都有锁状态标记，即每个Java对象都可以关联一个 Monitor 对象。</font>
 
-##### **3. *Java* 对象的访问定位**</font>
+![[../picture/Pasted image 20231225215727.png]]
+
+&emsp;&emsp;● **Klass Pointer :**用于存储指向方法区对象类型数据 (类元数据) 的指针。虚拟机通过这个指针来确定这个对象是哪个类的实例。
+
+##### **3. Java 对象的访问定位**</font>
 &emsp; &emsp; 当对象创建完成后，就是使用对象阶段。在 Java环境中，基本类型数据存放在 *Stack* 中，存放的是数据，当产生对象时，只把对象的 *reference* 存放在 *Stack* 中，用于指向某个对象，对象本身存放在 *Heap* 中。Java 程序会通过栈上的引用数据 ( *reference* ) 来操作堆上的具体对象。对象的访问方式有两种：<font color=red>**① 使用句柄**；**②直接指针**</font>
 &emsp; &emsp;  &emsp; ① **使用句柄方式**：如果使用句柄访问时，Java堆中将会划分出一块内存作为句柄池，引用( *reference* )中存储的是对象的句柄地址，在句柄中包含了对象实例数据 (属性值结构体) 与类型数据(类信息、方法类型信息)各自的具体地址信息。<font color=green>使用句柄访问的好处是句柄中储存的是稳定的对象地址，当对象被移动时候，只需要更新句柄中的对象实例部分的值即可，句柄本身不用被移动修改。</font>
 ![[../picture/Pasted image 20231225220035.png#pic_center|480]]
@@ -773,6 +871,8 @@ Step6: obj2不再指向GcOjbect实例2,其引用计数减1,结果为1,此时引�
 &emsp;  &emsp; &emsp;  ➹ 问题分析：通常情况下，由于新生代空间较小，*Eden* 区很快被填满，就会导致频繁 *MinorGC*。因此<font color=green>**可以通过增大新生代空间来降低 *MinorGC* 的频率，扩容新生代空间后，*MinorGC* 频率降低，对象在新生代得到充分回收，只有生命周期长的对象才进入老年代。这样老年代增速变慢，*MajorGC* 频率自然也会降低。**</font>扩容 *Eden* 区虽然可以减少 *MinorGC* 的次数，但会增加单次 *MinorGC* 时间么？单次 *MinorGC* 时间会受哪些因素影响呢？
 &emsp;  &emsp; &emsp;首先，单次 *MinorGC* 时间由以下两部分组成：T1 (扫描新生代) 和 T2 (复制存活对象到 *Survivor* 区) 。那么 *MinorGC* 时间如下图所示：
 ![[../picture/Pasted image 20231226230343.png#pic_center|660]]
+
+#### 1.1.6 JIT 编译优化
 
 ### 1.2 Jar包
 &emsp; &emsp; Jar 是 java 的档案文件，是一种压缩文件，Jar文件与ZIP压缩文件兼容，区别是Jar文件中默认包含了一个`META-INF/MANIFEST.MF`的清单文件。<font color=green>当一个应用开发完成后，会将包含的`class`文件打包成一个Jar文件提供给其他人使用，只需要将Jar包路径添加到环境变量中，JVM会把这个Jar文件当成一个路径来处理，并在内存中解压Jar包。</font>
