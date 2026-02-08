@@ -1,5 +1,6 @@
 ### 2.1 Java 程序基本规则
 &emsp;&emsp;与C++相比，Java是完全的面向对象的语言，因此Java与C++在程序规则上有所区别：
+
 &emsp; &emsp;&emsp; ① Java程序必须以`class`的形式存在，`class`是java的最小程序单位。<font color=red>在Java程序中，不允许可执行语句、方法独立存在。</font>
 &emsp; &emsp;&emsp;  <font color=red>② 如果一个Java程序中定义了一个`public`类，则该程序文件的文件名必须和该`public`类名相同。因此，一个Java程序文件最多只能有一个`public`类。</font>
 &emsp; &emsp;&emsp;  ③ Java中编译器通过 Main() 方法作为程序的入口，且 Main() 的修饰符必须为：`public static void main(String [] args){}`

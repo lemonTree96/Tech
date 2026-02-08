@@ -182,7 +182,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:创建新数据库": false,
+      "bases:新建数据库": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -194,6 +194,7 @@
   },
   "active": "b348523ef14db376",
   "lastOpenFiles": [
+    "Java/二、Java 语法基础.md",
     "picture/Pasted image 20260102174424.png",
     "picture/Pasted image 20260102111934.png",
     "picture/Pasted image 20260102110847.png",
@@ -203,9 +204,7 @@
     "picture/Pasted image 20251227212946.png",
     "picture/Pasted image 20251213175611.png",
     "picture/Pasted image 20251213175242.png",
-    "Java/二、Java 语法基础.md",
     "picture/Pasted image 20250927161504.png",
-    "picture/Pasted image 20251213175453.png",
     "数据存储结构/二、MySQL.md",
     "数据存储结构/三、Redis.md",
     "Java/一、Java 运行机制与JVM.md",
